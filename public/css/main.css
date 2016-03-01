@@ -4,13 +4,27 @@ body {
   margin: 0;
   background-color: #EFEFEF;
   font-family: arial, sans-serif;
+  font-size: 16px;
+  color: #6B6B6B;
+  line-height: 25px;
 }
 
-/* line 8, ../scss/partial/_general.scss */
+/* line 11, ../scss/partial/_general.scss */
 .content-wrapper {
   max-width: 35em;
   margin-left: auto;
   margin-right: auto;
   background-color: white;
   padding: 1em;
+}
+
+/* line 19, ../scss/partial/_general.scss */
+.logo-wrapper {
+  border-bottom: solid 1px #efefef;
+  text-align: center;
+  margin-bottom: 1em;
+}
+/* line 24, ../scss/partial/_general.scss */
+.logo-wrapper img {
+  width: 10em;
 }

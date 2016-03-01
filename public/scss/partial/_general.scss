@@ -3,6 +3,9 @@ body {
     margin: 0;
     background-color: #EFEFEF;
     font-family: arial, sans-serif;
+    font-size: 16px;
+    color: #6B6B6B;
+    line-height: 25px;
 }
 
 .content-wrapper {
@@ -11,4 +14,14 @@ body {
     margin-right: auto;
     background-color: white;
     padding: 1em;
+}
+
+.logo-wrapper {
+    border-bottom: solid 1px #efefef;
+    text-align: center;
+    margin-bottom: 1em;
+
+    img {
+        width: 10em;
+    }
 }

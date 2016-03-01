@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "28a4d68056f916a1c6525cfea6ad3a70",
-    "content-hash": "bb6e47f4666dda3e814b203c8c10c577",
+    "hash": "2127fdc502042d2bc729b8f96af0d120",
+    "content-hash": "1651959f55322154ed70df43dfcb0035",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -73,6 +73,48 @@
                 "string"
             ],
             "time": "2015-11-06 14:35:42"
+        },
+        {
+            "name": "goodlinks/buzzstream-feed",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/goodlinks/buzzstream-feed.git",
+                "reference": "3ef4b8749c5a3506e59789dc7978ca88df6d592e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/goodlinks/buzzstream-feed/zipball/3ef4b8749c5a3506e59789dc7978ca88df6d592e",
+                "reference": "3ef4b8749c5a3506e59789dc7978ca88df6d592e",
+                "shasum": ""
+            },
+            "require": {
+                "tedivm/stash": "0.13.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "GoodLinks\\BuzzStreamFeed\\": [
+                        "src"
+                    ]
+                }
+            },
+            "license": [
+                "CC-BY-NC"
+            ],
+            "authors": [
+                {
+                    "name": "Kalen Jordan",
+                    "email": "kalen@goodlinks.io"
+                }
+            ],
+            "description": "BuzzStream Feed - Share your BuzzStream activity",
+            "homepage": "http://goodlinks.io",
+            "support": {
+                "source": "https://github.com/goodlinks/buzzstream-feed/tree/master",
+                "issues": "https://github.com/goodlinks/buzzstream-feed/issues"
+            },
+            "time": "2016-02-01 11:54:09"
         },
         {
             "name": "illuminate/auth",
@@ -2155,6 +2197,60 @@
             "time": "2016-02-02 13:44:19"
         },
         {
+            "name": "tedivm/stash",
+            "version": "v0.13.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tedious/Stash.git",
+                "reference": "3489b13bad93c81a898fcb1054ae954575e1a7b6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tedious/Stash/zipball/3489b13bad93c81a898fcb1054ae954575e1a7b6",
+                "reference": "3489b13bad93c81a898fcb1054ae954575e1a7b6",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.4|^7.0"
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "^1.9",
+                "phpunit/phpunit": "4.7.*",
+                "satooshi/php-coveralls": "1.0.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Stash\\": "src/Stash/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Robert Hafner",
+                    "email": "tedivm@tedivm.com"
+                },
+                {
+                    "name": "Josh Hall-Bachner",
+                    "email": "charlequin@gmail.com"
+                }
+            ],
+            "description": "The place to keep your cache.",
+            "homepage": "http://github.com/tedious/Stash",
+            "keywords": [
+                "apc",
+                "cache",
+                "caching",
+                "memcached",
+                "redis",
+                "sessions"
+            ],
+            "time": "2015-12-29 00:07:05"
+        },
+        {
             "name": "twig/twig",
             "version": "v1.24.0",
             "source": {
@@ -3276,7 +3372,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "goodlinks/buzzstream-feed": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
