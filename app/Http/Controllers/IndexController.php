@@ -22,7 +22,7 @@ class IndexController extends Controller
         $offset = isset($_GET['offset']) ? $_GET['offset'] : null;
         $size = isset($_GET['size']) ? $_GET['size'] : 200;
 
-        $after = strtotime("2016-03-01") * 1000;
+        $after = strtotime("2016-02-01") * 1000;
         $history = History::getList($after, null, $offset, $size);
         $historyForProject = array();
 
@@ -60,6 +60,7 @@ class IndexController extends Controller
             "title"             => "BuzzStream Feed",
             "body_class"        => "home",
             "history"           => $historyForProject,
+            "project_data"      => $thisProjectData,
         ));
     }
 }

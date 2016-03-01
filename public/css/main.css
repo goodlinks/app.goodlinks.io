@@ -55,17 +55,25 @@ body {
   padding-left: 10px;
 }
 /* line 54, ../scss/partial/_general.scss */
+.project-wrapper .project-summary .project-thumbnail {
+  float: right;
+}
+/* line 56, ../scss/partial/_general.scss */
+.project-wrapper .project-summary .project-thumbnail img {
+  width: 55px;
+}
+/* line 61, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .project-name {
   font-size: 20px;
   line-height: 31px;
   font-weight: bold;
 }
-/* line 61, ../scss/partial/_general.scss */
+/* line 68, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item {
   margin-bottom: 1em;
   border: solid 1px #F9F9F9;
 }
-/* line 65, ../scss/partial/_general.scss */
+/* line 72, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item img {
   width: 24px;
   display: inline-block;
@@ -74,7 +82,7 @@ body {
   border-radius: 50%;
   border: solid 1px white;
 }
-/* line 74, ../scss/partial/_general.scss */
+/* line 81, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-header {
   background-color: #F9F9F9;
   font-size: 12px;
@@ -82,7 +90,7 @@ body {
   font-weight: bold;
   padding: 0.5em;
 }
-/* line 82, ../scss/partial/_general.scss */
+/* line 89, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-body {
   padding: 0.75em;
 }

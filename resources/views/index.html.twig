@@ -49,12 +49,13 @@
         </div>
         <div class="project-wrapper">
             <div class="project-summary">
-                <div class="project-name">MageMojo</div>
+                <div class="project-thumbnail"><img src="{{ project_data.image }}"></div>
+                <div class="project-name">{{ project_data.name }}</div>
                 <div class="project-stats">
-                    <i class="fa fa-eye"></i> 49 events
-                    <i class="fa fa-external-link padding-left"></i> 25 websites
-                    <i class="fa fa-user padding-left"></i> 18 people
-                    <i class="fa fa-link padding-left"></i> 2 closed links
+                    <i class="fa fa-eye"></i> {{ history|length }} events
+                    <i class="fa fa-external-link padding-left"></i> X websites
+                    <i class="fa fa-user padding-left"></i> X people
+                    <i class="fa fa-link padding-left"></i> X closed links
                 </div>
             </div>
             <div class="feed">
