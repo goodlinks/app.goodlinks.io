@@ -1,8 +1,8 @@
 /* line 1, ../scss/partial/_general.scss */
 body {
-  padding: 1em;
+  padding: 2em;
   margin: 0;
-  background-color: #EFEFEF;
+  background-color: #F9F9F9;
   font-family: arial, sans-serif;
   font-size: 16px;
   color: #6B6B6B;
@@ -11,20 +11,78 @@ body {
 
 /* line 11, ../scss/partial/_general.scss */
 .content-wrapper {
-  max-width: 35em;
+  max-width: 40em;
   margin-left: auto;
   margin-right: auto;
   background-color: white;
-  padding: 1em;
+  padding: 2em;
+  box-shadow: 0px 0px 34px #E0E0E0;
 }
 
-/* line 19, ../scss/partial/_general.scss */
+/* line 20, ../scss/partial/_general.scss */
 .logo-wrapper {
   border-bottom: solid 1px #efefef;
   text-align: center;
   margin-bottom: 1em;
 }
-/* line 24, ../scss/partial/_general.scss */
+/* line 25, ../scss/partial/_general.scss */
+.logo-wrapper svg {
+  margin: 1em;
+  width: 150px;
+}
+/* line 29, ../scss/partial/_general.scss */
+.logo-wrapper svg path, .logo-wrapper svg rect {
+  fill: gray;
+}
+/* line 34, ../scss/partial/_general.scss */
 .logo-wrapper img {
   width: 10em;
+}
+/* line 38, ../scss/partial/_general.scss */
+.logo-wrapper .date-range {
+  text-transform: uppercase;
+  font-size: 14px;
+  margin-top: -15px;
+  margin-bottom: 15px;
+}
+
+/* line 47, ../scss/partial/_general.scss */
+.project-wrapper .project-summary {
+  margin-bottom: 1em;
+}
+/* line 50, ../scss/partial/_general.scss */
+.project-wrapper .project-summary i.padding-left {
+  padding-left: 10px;
+}
+/* line 54, ../scss/partial/_general.scss */
+.project-wrapper .project-summary .project-name {
+  font-size: 20px;
+  line-height: 31px;
+  font-weight: bold;
+}
+/* line 61, ../scss/partial/_general.scss */
+.project-wrapper .feed .feed-item {
+  margin-bottom: 1em;
+  border: solid 1px #F9F9F9;
+}
+/* line 65, ../scss/partial/_general.scss */
+.project-wrapper .feed .feed-item img {
+  width: 24px;
+  display: inline-block;
+  margin-bottom: -7px;
+  margin-right: 3px;
+  border-radius: 50%;
+  border: solid 1px white;
+}
+/* line 74, ../scss/partial/_general.scss */
+.project-wrapper .feed .feed-item .item-header {
+  background-color: #F9F9F9;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+  padding: 0.5em;
+}
+/* line 82, ../scss/partial/_general.scss */
+.project-wrapper .feed .feed-item .item-body {
+  padding: 0.75em;
 }

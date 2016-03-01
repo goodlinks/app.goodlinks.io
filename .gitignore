@@ -1,5 +1,6 @@
 /vendor
-.env
+/.env
+/.projects.json
 /.idea
 /public/.sass-cache
 /storage/template_cache
