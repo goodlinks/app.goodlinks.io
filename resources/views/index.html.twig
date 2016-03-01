@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block head %}
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+        {# If these are async the button wave didn't work right at one point.  Seems to
+           be working now though. #}
+        <script src="/js/external/jquery.min.js"></script>
+        <link rel="shortcut icon" type="image/png" href="https://media.simplecast.com/podcast/favicon_image/1623/x16_1453500952-favicon.png" />
+
+        <title>{{ title ? title ~ " | Goodlinks" : "Goodlinks" }}</title>
+    {% endblock %}
+</head>
+
+<body class="{{ body_class }}">
+<div class="content-wrapper">
+    Here
+</div>
+</body>
+</html>

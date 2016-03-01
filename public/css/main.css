@@ -1,0 +1,16 @@
+/* line 1, ../scss/partial/_general.scss */
+body {
+  padding: 1em;
+  margin: 0;
+  background-color: #EFEFEF;
+  font-family: arial, sans-serif;
+}
+
+/* line 8, ../scss/partial/_general.scss */
+.content-wrapper {
+  max-width: 35em;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  padding: 1em;
+}
