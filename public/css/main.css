@@ -71,7 +71,7 @@ body {
 /* line 68, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item {
   margin-bottom: 1em;
-  border: solid 1px #F9F9F9;
+  border: solid 1px #efefef;
 }
 /* line 72, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item img {
