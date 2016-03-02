@@ -45,7 +45,7 @@
                     </g>
                 </g>
             </svg>
-            <div class="date-range">Feb 25 thru Mar 1</div>
+            <div class="date-range">Feb 1 thru Mar 1</div>
         </div>
         <div class="project-wrapper">
             <div class="project-summary">
@@ -53,9 +53,8 @@
                 <div class="project-name">{{ project_data.name }}</div>
                 <div class="project-stats">
                     <i class="fa fa-eye"></i> {{ history|length }} events
-                    <i class="fa fa-external-link padding-left"></i> X websites
-                    <i class="fa fa-user padding-left"></i> X people
-                    <i class="fa fa-link padding-left"></i> X closed links
+                    <i class="fa fa-user padding-left"></i> {{ website_count }} websites
+                    <i class="fa fa-link padding-left"></i> {{ placement_count }} placements
                 </div>
             </div>
             <div class="feed">

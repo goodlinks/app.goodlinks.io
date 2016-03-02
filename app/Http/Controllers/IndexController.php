@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Helper\TwigHelper;
 use App\Model\HistoryItem;
+use App\Model\HistoryItemProject;
+use App\Model\HistoryItemWebsite;
 
 use GoodLinks\BuzzStreamFeed\Api;
 use GoodLinks\BuzzStreamFeed\History;
+use DB;
 
 class IndexController extends Controller
 {
@@ -16,9 +19,48 @@ class IndexController extends Controller
         Api::setConsumerKey(getenv('BUZZSTREAM_CONSUMER_KEY'));
         Api::setConsumerSecret(getenv('BUZZSTREAM_CONSUMER_SECRET'));
 
-        $historyItems = HistoryItem::where('created_at', '>', '0000-00-00')
-            ->limit(200)
+        $excludedWebsiteIds = array(
+            56013240,
+            55896282
+        );
+
+        $historyItems = HistoryItem::where('buzzstream_created_at', '>', '2016-02-01')
+            ->leftJoin('history_item_projects', function($join) {
+                /** @var $join \Illuminate\Database\Query\JoinClause */
+                $join->on('history_item_projects.history_item_id', '=', 'history_items.id');
+            })
+            ->leftJoin('history_item_websites', function($join) {
+                /** @var $join \Illuminate\Database\Query\JoinClause */
+                $join->on('history_item_websites.history_item_id', '=', 'history_items.id');
+            })
+            ->whereNotIn('history_item_websites.buzzstream_website_id', $excludedWebsiteIds)
+            ->where('history_item_projects.buzzstream_project_id', '=', $projectData['buzzstream_project_id'])
+            ->limit(2000)
             ->get();
+
+        $websiteCount = HistoryItem::where('history_item_projects.buzzstream_project_id', '=', $projectData['buzzstream_project_id'])
+            ->leftJoin('history_item_projects', function($join) {
+                /** @var $join \Illuminate\Database\Query\JoinClause */
+                $join->on('history_item_projects.history_item_id', '=', 'history_items.id');
+            })
+            ->leftJoin('history_item_websites', function($join) {
+                /** @var $join \Illuminate\Database\Query\JoinClause */
+                $join->on('history_item_websites.history_item_id', '=', 'history_items.id');
+            })
+            ->count(DB::raw('DISTINCT history_item_websites.buzzstream_website_id'));
+
+        $placementCount = HistoryItem::where('type', '=', 'Stage')
+            ->where('summary', 'like', '%Successful%')
+            ->leftJoin('history_item_websites', function($join) {
+                /** @var $join \Illuminate\Database\Query\JoinClause */
+                $join->on('history_item_websites.history_item_id', '=', 'history_items.id');
+            })
+            ->leftJoin('history_item_projects', function($join) {
+                /** @var $join \Illuminate\Database\Query\JoinClause */
+                $join->on('history_item_projects.history_item_id', '=', 'history_items.id');
+            })
+            ->where('history_item_projects.buzzstream_project_id', '=', $projectData['buzzstream_project_id'])
+            ->count();
 
         $historyForProject = array();
 
@@ -26,9 +68,7 @@ class IndexController extends Controller
         foreach ($historyItems as $historyItem) {
             $buzzstreamHistoryItem = new \GoodLinks\BuzzStreamFeed\HistoryItem();
             $buzzstreamHistoryItem->load($historyItem->getBuzzstreamApiUrl());
-            if ($buzzstreamHistoryItem->isInProject($projectData['buzzstream_api_url'])) {
-                $historyForProject[] = $buzzstreamHistoryItem;
-            }
+            $historyForProject[] = $buzzstreamHistoryItem;
         }
 
         $twig = TwigHelper::twig();
@@ -38,63 +78,9 @@ class IndexController extends Controller
             "body_class"        => "home",
             "history"           => $historyForProject,
             "project_data"      => $projectData,
+            "website_count"     => $websiteCount,
+            "placement_count"   => $placementCount,
         ));
-    }
-
-    /**
-     * Grab new history items since the last import
-     *
-     * @return string
-     * @throws \Exception
-     */
-    public function importBuzzstreamIncremental()
-    {
-        $before = microtime(true);
-        Api::setConsumerKey(getenv('BUZZSTREAM_CONSUMER_KEY'));
-        Api::setConsumerSecret(getenv('BUZZSTREAM_CONSUMER_SECRET'));
-
-        $projectData = $this->_getProjectData();
-
-        $lastHistoryItem = HistoryItem::where('created_at', '>', '0000-00-00')
-            ->first();
-
-        $offset = isset($_GET['offset']) ? $_GET['offset'] : null;
-        $size = isset($_GET['size']) ? $_GET['size'] : 50;
-        $fromDate = isset($_GET['from']) ? $_GET['from'] : date("Y-m-d", time() - (60 * 60 * 24 * 30));
-        $afterTimestampInMilliseconds = strtotime($fromDate) * 1000;
-
-        $history = History::getList($afterTimestampInMilliseconds, null, $offset, $size);
-        if (empty($history)) {
-            return "Finished processing";
-        }
-
-        $results = array();
-        foreach ($history as $item) {
-            $buzzstreamId = $item->getBuzzstreamId();
-
-            HistoryItem::create(array(
-                'buzzstream_id'         => $buzzstreamId,
-                'buzzstream_created_at' => $item->getCreatedAt(),
-                'type'                  => $item->getType(),
-                'summary'               => $item->getSummary(),
-            ));
-        }
-
-        $newOffset = $offset + $size;
-        $project = $projectData['id'];
-        $key = $projectData['secret'];
-        $nextProcessUrl = "/processFeed?project=$project&key=$key&size=$size&offset=$newOffset";
-
-        return "
-            From Date: $fromDate
-            <br>Processing Time: " . number_format(microtime(true) - $before, 2) . "s
-            <br>
-            <br><a href='$nextProcessUrl'>$nextProcessUrl</a>
-            <br><br>
-            <pre>"
-                . print_r($results, 1) .
-            "</pre>
-            ";
     }
 
     public function import()
@@ -114,7 +100,7 @@ class IndexController extends Controller
     /**
      * Do an initial import starting at the most recent history item
      * and going back in time
-     * 
+     *
      * @return array
      * @throws \Exception
      */
@@ -138,18 +124,38 @@ class IndexController extends Controller
         $results = array();
         $insertedCount = 0;
 
-        foreach ($history as $item) {
-            $buzzstreamId = $item->getBuzzstreamId();
-            if (HistoryItem::findByBuzzstreamId($buzzstreamId)->getId()) {
-                continue;
+        foreach ($history as $buzzstreamHistoryItem) {
+            $buzzstreamId = $buzzstreamHistoryItem->getBuzzstreamId();
+            $item = HistoryItem::findByBuzzstreamId($buzzstreamId);
+
+            if (! $item->getId()) {
+                $item = HistoryItem::create(array(
+                    'buzzstream_id'         => $buzzstreamId,
+                    'buzzstream_created_at' => $buzzstreamHistoryItem->getCreatedAt(),
+                    'type'                  => $buzzstreamHistoryItem->getType(),
+                    'summary'               => $buzzstreamHistoryItem->getSummary(),
+                ));
             }
 
-            $item = HistoryItem::create(array(
-                'buzzstream_id'         => $buzzstreamId,
-                'buzzstream_created_at' => $item->getCreatedAt(),
-                'type'                  => $item->getType(),
-                'summary'               => $item->getSummary(),
-            ));
+            $buzzstreamProjectIds = $buzzstreamHistoryItem->getBuzzstreamProjectIds();
+            DB::statement("DELETE FROM history_item_projects WHERE history_item_id = {$item->getId()}");
+
+            foreach ($buzzstreamProjectIds as $projectId) {
+                HistoryItemProject::create(array(
+                    'history_item_id'       => $item->getId(),
+                    'buzzstream_project_id' => $projectId,
+                ));
+            }
+
+            $buzzstreamWebsiteIds = $buzzstreamHistoryItem->getBuzzstreamWebsiteIds();
+            DB::statement("DELETE FROM history_item_websites WHERE history_item_id = {$item->getId()}");
+            foreach ($buzzstreamWebsiteIds as $websiteId) {
+                HistoryItemWebsite::create(array(
+                    'history_item_id'       => $item->getId(),
+                    'buzzstream_website_id' => $websiteId,
+                ));
+            }
+
             $results[] = $item->toArray();
             $insertedCount++;
         }
