@@ -45,7 +45,13 @@
                     </g>
                 </g>
             </svg>
-            <div class="date-range">Feb 1 thru Mar 1</div>
+            <div class="date-range">
+                {{ from_date.format("M j") }} thru {{ to_date.format("M j") }}
+
+                {% if from_date > billing_start_date %}
+                    <br><a href="?project={{ project_data.id }}&key={{ project_data.secret }}&from={{ from_date.subMonth().format("Y-m-d") }}"><i class="fa fa-arrow-left"></i></a>
+                {% endif %}
+            </div>
         </div>
         <div class="project-wrapper">
             <div class="project-summary">
@@ -62,7 +68,7 @@
                     <div class="feed-item">
                         <div class="item-header">
                             <img src="{{ item.getAvatarUrl() }}">
-                            {{ item.getBuzzstreamCreatedAtDate().format("M d, Y") }}
+                            {{ item.getBuzzstreamCreatedAtDate().format("M j, Y") }}
                             {% if item.getWebsiteNames() %}
                                 - {{ item.getWebsiteNames() }}
                             {% endif %}
@@ -73,6 +79,8 @@
                                     <i class="fa fa-comments"></i>
                                 {% elseif item.getType() == 'EMail' %}
                                     <i class="fa fa-envelope"></i>
+                                {% elseif item.getType() == 'Stage' %}
+                                    <i class="fa fa-arrow-right"></i>
                                 {% endif %}
                             </span>
                         </div>
@@ -84,7 +92,7 @@
                                     {{ item.getSummary() }}
                                 {% endif %}
                             </div>
-                            <div class="item-url" style="display: none;">{{ item.getHistoryItemApiUrl() }}</div>
+                            <div class="item-url" style="display: none;">{{ item.getBuzzstreamApiUrl() }}</div>
                         </div>
                     </div>
                 {% endfor %}

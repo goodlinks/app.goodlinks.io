@@ -7,24 +7,52 @@ use App\Model\HistoryItem;
 use App\Model\HistoryItemProject;
 use App\Model\HistoryItemWebsite;
 
+use Carbon\Carbon;
 use GoodLinks\BuzzStreamFeed\Api;
 use GoodLinks\BuzzStreamFeed\History;
 use DB;
 
 class IndexController extends Controller
 {
+    protected function _getFromDate()
+    {
+        if (isset($_GET['from'])) {
+            $fromDate = new Carbon($_GET['from']);
+            return $fromDate;
+        }
+
+        $projectData = $this->_getProjectData();
+
+        $fromDate = new Carbon($projectData['billing_start_date']);
+        $toDate = $fromDate->copy()->addMonth(1);
+        $today = new Carbon();
+
+        while ($toDate < $today) {
+            $fromDate->addMonth(1);
+            $toDate->addMonth(1);
+        }
+
+        return $fromDate;
+    }
+
     public function index()
     {
         $projectData = $this->_getProjectData();
+
         Api::setConsumerKey(getenv('BUZZSTREAM_CONSUMER_KEY'));
         Api::setConsumerSecret(getenv('BUZZSTREAM_CONSUMER_SECRET'));
 
+        $fromDate = $this->_getFromDate();
+        $toDate = $fromDate->copy()->addMonth(1);
+
         $excludedWebsiteIds = array(
             56013240,
-            55896282
+            55896282,
+            55438015, // Buzzstream
         );
 
-        $historyItems = HistoryItem::where('buzzstream_created_at', '>', '2016-02-01')
+        $historyItems = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
+            ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
             ->leftJoin('history_item_projects', function($join) {
                 /** @var $join \Illuminate\Database\Query\JoinClause */
                 $join->on('history_item_projects.history_item_id', '=', 'history_items.id');
@@ -38,7 +66,9 @@ class IndexController extends Controller
             ->limit(2000)
             ->get();
 
-        $websiteCount = HistoryItem::where('history_item_projects.buzzstream_project_id', '=', $projectData['buzzstream_project_id'])
+        $websiteCount = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
+            ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
+            ->where('history_item_projects.buzzstream_project_id', '=', $projectData['buzzstream_project_id'])
             ->leftJoin('history_item_projects', function($join) {
                 /** @var $join \Illuminate\Database\Query\JoinClause */
                 $join->on('history_item_projects.history_item_id', '=', 'history_items.id');
@@ -49,7 +79,9 @@ class IndexController extends Controller
             })
             ->count(DB::raw('DISTINCT history_item_websites.buzzstream_website_id'));
 
-        $placementCount = HistoryItem::where('type', '=', 'Stage')
+        $placementCount = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
+            ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
+            ->where('type', '=', 'Stage')
             ->where('summary', 'like', '%Successful%')
             ->leftJoin('history_item_websites', function($join) {
                 /** @var $join \Illuminate\Database\Query\JoinClause */
@@ -62,8 +94,6 @@ class IndexController extends Controller
             ->where('history_item_projects.buzzstream_project_id', '=', $projectData['buzzstream_project_id'])
             ->count();
 
-        $historyForProject = array();
-
         $twig = TwigHelper::twig();
 
         return $twig->render('index.html.twig', array(
@@ -73,6 +103,9 @@ class IndexController extends Controller
             "project_data"      => $projectData,
             "website_count"     => $websiteCount,
             "placement_count"   => $placementCount,
+            "from_date"         => $fromDate,
+            "to_date"           => $toDate,
+            "billing_start_date"    => new Carbon($projectData['billing_start_date']),
         ));
     }
 

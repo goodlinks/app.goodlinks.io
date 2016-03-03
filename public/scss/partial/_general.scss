@@ -8,6 +8,13 @@ body {
     line-height: 25px;
 }
 
+a {
+    color: inherit;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 .content-wrapper {
     max-width: 40em;
     margin-left: auto;
@@ -88,6 +95,7 @@ body {
             .item-type {
                 float: right;
                 font-size: 14px;
+                color: #B5B5B5;
             }
         }
 
