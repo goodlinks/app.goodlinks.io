@@ -60,7 +60,7 @@
                 <div class="project-stats">
                     <i class="fa fa-eye"></i> {{ history|length }} events
                     <i class="fa fa-user padding-left"></i> {{ website_count }} websites
-                    <i class="fa fa-link padding-left"></i> {{ placement_count }} placements
+                    <i class="fa fa-link padding-left"></i> {{ placement_count }} {{ placement_count == 1 ? "placement" : "placements" }}
                 </div>
             </div>
             <div class="feed">
