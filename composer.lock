@@ -80,12 +80,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/goodlinks/buzzstream-feed.git",
-                "reference": "3ef4b8749c5a3506e59789dc7978ca88df6d592e"
+                "reference": "0466d9342c79ef1bf378bebf4440c56214b92260"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/goodlinks/buzzstream-feed/zipball/3ef4b8749c5a3506e59789dc7978ca88df6d592e",
-                "reference": "3ef4b8749c5a3506e59789dc7978ca88df6d592e",
+                "url": "https://api.github.com/repos/goodlinks/buzzstream-feed/zipball/0466d9342c79ef1bf378bebf4440c56214b92260",
+                "reference": "0466d9342c79ef1bf378bebf4440c56214b92260",
                 "shasum": ""
             },
             "require": {
@@ -114,7 +114,7 @@
                 "source": "https://github.com/goodlinks/buzzstream-feed/tree/master",
                 "issues": "https://github.com/goodlinks/buzzstream-feed/issues"
             },
-            "time": "2016-02-01 11:54:09"
+            "time": "2016-03-03 10:06:38"
         },
         {
             "name": "illuminate/auth",
