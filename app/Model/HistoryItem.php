@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -23,9 +24,35 @@ class HistoryItem extends Model
         return $this->buzzstream_created_at;
     }
 
+    public function getBuzzstreamCreatedAtDate()
+    {
+        $date = new Carbon($this->getBuzzstreamCreatedAt());
+        return $date;
+    }
+
     public function getBuzzstreamId()
     {
         return $this->buzzstream_id;
+    }
+
+    public function getAvatarUrl()
+    {
+        return $this->avatar_url;
+    }
+
+    public function getWebsiteNames()
+    {
+        return $this->website_names;
+    }
+
+    public function getSummary()
+    {
+        return $this->summary;
+    }
+
+    public function getType()
+    {
+        return $this->type;
     }
 
     public function getBuzzstreamApiUrl()

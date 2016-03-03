@@ -62,14 +62,27 @@
                     <div class="feed-item">
                         <div class="item-header">
                             <img src="{{ item.getAvatarUrl() }}">
-                            {{ item.getDate() }}
-                            {% if item.getWebsiteNamesCsv() %}
-                                - {{ item.getWebsiteNamesCsv() }}
+                            {{ item.getBuzzstreamCreatedAtDate().format("M d, Y") }}
+                            {% if item.getWebsiteNames() %}
+                                - {{ item.getWebsiteNames() }}
                             {% endif %}
+                            <span class="item-type">
+                                {% if item.getType() == 'Tweet' %}
+                                    <i class="fa fa-twitter"></i>
+                                {% elseif item.getType() == 'Note' %}
+                                    <i class="fa fa-comments"></i>
+                                {% elseif item.getType() == 'EMail' %}
+                                    <i class="fa fa-envelope"></i>
+                                {% endif %}
+                            </span>
                         </div>
                         <div class="item-body">
                             <div class="item-summary">
-                                {{ item.getSummary() }}
+                                {% if item.getType() == 'Tweet' and item.getSummary()|slice(0, 2) == 'DM' %}
+                                    <i>Private DM</i>
+                                {% else %}
+                                    {{ item.getSummary() }}
+                                {% endif %}
                             </div>
                             <div class="item-url" style="display: none;">{{ item.getHistoryItemApiUrl() }}</div>
                         </div>

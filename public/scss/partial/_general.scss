@@ -84,6 +84,11 @@ body {
             text-transform: uppercase;
             font-weight: bold;
             padding: 0.5em;
+
+            .item-type {
+                float: right;
+                font-size: 14px;
+            }
         }
 
         .item-body {

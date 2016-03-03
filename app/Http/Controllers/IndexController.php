@@ -64,19 +64,12 @@ class IndexController extends Controller
 
         $historyForProject = array();
 
-        /** @var HistoryItem $historyItem */
-        foreach ($historyItems as $historyItem) {
-            $buzzstreamHistoryItem = new \GoodLinks\BuzzStreamFeed\HistoryItem();
-            $buzzstreamHistoryItem->load($historyItem->getBuzzstreamApiUrl());
-            $historyForProject[] = $buzzstreamHistoryItem;
-        }
-
         $twig = TwigHelper::twig();
 
         return $twig->render('index.html.twig', array(
             "title"             => "BuzzStream Feed",
             "body_class"        => "home",
-            "history"           => $historyForProject,
+            "history"           => $historyItems,
             "project_data"      => $projectData,
             "website_count"     => $websiteCount,
             "placement_count"   => $placementCount,
@@ -134,6 +127,9 @@ class IndexController extends Controller
                     'buzzstream_created_at' => $buzzstreamHistoryItem->getCreatedAt(),
                     'type'                  => $buzzstreamHistoryItem->getType(),
                     'summary'               => $buzzstreamHistoryItem->getSummary(),
+                    'body'                  => $buzzstreamHistoryItem->getBody(),
+                    'avatar_url'            => $buzzstreamHistoryItem->getAvatarUrl(),
+                    'website_names'         => $buzzstreamHistoryItem->getWebsiteNamesCsv(),
                 ));
             }
 
