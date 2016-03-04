@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block head %}
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+        {# If these are async the button wave didn't work right at one point.  Seems to
+           be working now though. #}
+        <script src="/js/external/jquery.min.js"></script>
+        <link rel="shortcut icon" type="image/png" href="https://media.simplecast.com/podcast/favicon_image/1623/x16_1453500952-favicon.png" />
+
+        <title>{{ project_data.name }} | Goodlinks BuzzStream Feed }}</title>
+    {% endblock %}
+</head>
+
+<body class="{{ body_class }}">
+    <div class="content-wrapper">
+        <div class="logo-wrapper">
+            <svg viewBox="0 0 571 139" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+                <title>logo-white</title>
+                <desc>Created with Sketch.</desc>
+                <defs></defs>
+                <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+                    <g id="logo-negative" sketch:type="MSArtboardGroup" transform="translate(-230.000000, -331.000000)" fill="#FFFFFF">
+                        <g id="logo-white" sketch:type="MSLayerGroup" transform="translate(230.000000, 331.000000)">
+                            <g id="Layer_1" sketch:type="MSShapeGroup">
+                                <g id="Group">
+                                    <path d="M53.52125,39.66825 C48.616,34.21 41.34125,30.98825 33.3595,30.98825 C13.1995,30.98825 0.0395,47.22825 0.0395,67.25 C0.0395,87.13175 13.20125,103.51 33.3595,103.51 C41.343,103.51 48.7595,100.43 53.52125,94.4135 L53.52125,106.03525 C53.52125,118.217 48.34125,125.9135 34.06125,125.9135 C23.56125,125.9135 19.64125,119.89525 16.70125,111.6335 L2.42125,111.6335 C7.18125,127.59525 16.14125,138.79525 34.063,138.79525 C55.203,138.79525 68.0795,125.07525 68.0795,106.0335 L68.0795,33.36475 L53.52475,33.36475 L53.52125,39.66825 L53.52125,39.66825 L53.52125,39.66825 Z M47.77775,84.04825 C44.13775,88.10825 39.23775,90.21 33.35775,90.21 C27.75775,90.21 22.99775,87.83175 19.35775,84.04825 C15.85775,79.8535 14.87775,73.68825 14.87775,67.2465 C14.87775,60.6665 15.85775,54.6465 19.35775,50.44475 C22.99775,46.5265 27.75775,44.1395 33.35775,44.1395 C39.23775,44.1395 44.13775,46.3795 47.77775,50.44475 C51.41775,54.6395 53.51775,60.6665 53.51775,67.2465 C53.52125,73.68825 51.41775,79.84825 47.77775,84.04825 L47.77775,84.04825 Z" id="Shape"></path>
+                                    <path d="M289.9095,39.94825 C284.45125,33.7865 277.59125,31.26825 268.63125,31.26825 C248.4695,31.26825 234.61125,46.80825 234.61125,69.21 C234.61125,91.74825 248.47125,107.29 268.63125,107.29 C277.31125,107.29 284.73125,104.07 289.9095,98.47175 L289.9095,105.0535 L304.466,105.0535 L304.466,0.3265 L289.9095,0.3265 L289.9095,39.94825 L289.9095,39.94825 L289.9095,39.94825 Z M268.6295,94.41175 C254.0695,94.41175 249.5895,81.95 249.5895,69.21 C249.5895,56.61 254.0695,44.01 268.6295,44.01 C283.46775,44.01 289.90775,54.51 289.90775,69.21 C289.9095,84.18825 283.47125,94.41175 268.6295,94.41175 L268.6295,94.41175 Z" id="Shape"></path>
+                                    <path d="M332.67775,90.63175 L332.67775,0.4665 L318.53775,0.4665 L318.53775,90.63 C318.53775,98.61175 322.17775,105.04475 336.03775,105.04475 L336.03775,103.09 L336.03775,91.89 C334.21775,91.8865 332.67775,91.3265 332.67775,90.63175 L332.67775,90.63175 Z" id="Shape"></path>
+                                    <rect id="Rectangle-path" x="349.47075" y="10.26825" width="14.42" height="15.82"></rect>
+                                    <rect id="Rectangle-path" x="349.47075" y="33.3665" width="14.42" height="71.68"></rect>
+                                    <path d="M411.3525,31.26825 C403.3725,31.26825 397.2125,34.90825 393.156,40.08825 L393.156,33.363 L378.7395,33.363 L378.7395,105.04125 L393.156,105.04125 L393.156,72.423 C393.156,55.063 398.33775,44.003 411.3525,44.003 C424.3725,44.003 426.61425,54.08825 426.61425,66.54475 L426.61425,105.04475 L441.03425,105.04475 L441.03425,66.54475 C441.03425,44.1465 434.7325,31.26825 411.3525,31.26825 L411.3525,31.26825 Z" id="Shape"></path>
+                                    <path d="M502.84075,37.2865 C503.8225,36.44825 506.8955,33.3665 501.439,33.3665 L487.439,33.3665 L466.7155,53.8135 L466.7155,0.1865 L452.30075,0.1865 L452.30075,105.04825 L466.7155,105.04825 L466.7155,72.70825 C468.3955,70.88825 468.81375,70.32825 470.3555,68.64825 L495.55375,105.05175 L512.3555,105.05175 L480.7155,59.13175 L502.84075,37.2865 L502.84075,37.2865 Z" id="Shape"></path>
+                                    <path d="M559.82425,68.09 C552.82425,64.03 545.82425,62.35 538.96425,60.25 C532.3825,58.29 527.9095,57.03 527.9095,53.39 C527.9095,47.08825 534.2095,43.30825 542.04425,43.30825 C548.7695,43.30825 554.0895,48.07 556.04425,53.67 L570.32425,53.67 C568.22425,41.07 558.42425,30.98825 542.04425,30.98825 C534.9095,30.98825 528.32425,33.08825 523.14425,36.44825 C517.2695,40.503 513.7695,46.53 513.7695,53.39 C513.7695,59.69 515.5895,65.15 524.546,70.19 C528.88425,72.57 537.8495,75.65 542.88425,76.917 C550.7225,79.29 556.046,80.417 556.046,85.597 C556.046,92.87175 548.6295,94.2735 542.46425,94.2735 C535.32425,94.2735 529.86425,89.9335 527.7695,84.47 L513.4895,84.47 C514.8895,91.05175 517.97125,96.65 522.1695,100.01 C527.3495,104.21 534.9095,107.15 542.47125,107.15 C550.17125,107.15 556.33125,105.19175 561.0965,102.38825 C567.113,98.61175 570.33125,92.7265 570.33125,85.59 C570.32425,78.17 568.359,73.27 559.82425,68.09 L559.82425,68.09 Z" id="Shape"></path>
+                                    <path d="M190.50425,31.26825 C174.67725,31.26825 163.409,40.8425 158.74,54.468 L174.077,54.468 C176.99775,48.3745 182.2075,44.00475 190.5095,44.00475 C204.9295,44.00475 209.9695,56.88475 209.9695,69.34475 C209.9695,81.80475 204.9295,94.54125 190.5095,94.54125 C182.23375,94.54125 177.02925,90.25375 174.1015,84.225 L158.74525,84.225 C163.4125,97.854 174.6825,107.423 190.5095,107.423 C211.65125,107.423 224.5295,90.3395 224.5295,69.343 C224.5295,48.3465 211.64775,31.26825 190.50425,31.26825 L190.50425,31.26825 Z" id="Shape"></path>
+                                    <path d="M111.686,94.5465 C97.4095,94.5465 92.226,81.81 92.226,69.35 C92.226,56.89 97.4095,44.01 111.686,44.01 C120.07025,44.01 125.27125,48.37625 128.16225,54.47325 L143.3435,54.47325 C138.713,40.84775 127.5165,31.2735 111.68775,31.2735 C90.54775,31.2735 77.526,48.35525 77.526,69.35525 C77.526,90.35525 90.5425,107.43525 111.68775,107.43525 C127.5165,107.43525 138.7095,97.861 143.3435,84.23725 L128.1395,84.23725 C125.23975,90.259 120.04925,94.5465 111.686,94.5465 L111.686,94.5465 Z" id="Shape"></path>
+                                    <path d="M130.2115,62.28875 C130.62625,64.6635 130.831,67.11525 130.831,69.55825 C130.831,71.9505 130.6455,74.35675 130.2395,76.68425 L171.59375,76.68425 C171.11775,74.35675 170.89025,71.9505 170.89025,69.55825 C170.89025,67.11525 171.13525,64.6635 171.62875,62.28875 L130.2115,62.28875 L130.2115,62.28875 Z" id="Shape"></path>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </svg>
+            <div class="date-range">
+                {{ from_date.format("M j") }} thru {{ to_date.format("M j") }}
+
+                {% if from_date > billing_start_date %}
+                    <br><a href="?project={{ project_data.id }}&key={{ project_data.secret }}&from={{ from_date.subMonth().format("Y-m-d") }}"><i class="fa fa-arrow-left"></i></a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="project-wrapper">
+            <div class="project-summary">
+                <div class="project-thumbnail"><img src="{{ project_data.image }}"></div>
+                <div class="project-name">{{ project_data.name }}</div>
+                <div class="project-stats">
+                    <i class="fa fa-eye"></i> {{ history|length }} events
+                    <i class="fa fa-user padding-left"></i> {{ website_count }} websites
+                    <i class="fa fa-paper-plane-o padding-left"></i> {{ pitch_count }} {{ pitch_count == 1 ? "pitch" : "pitches" }}
+                    <i class="fa fa-link padding-left"></i> {{ placement_count }} {{ placement_count == 1 ? "placement" : "placements" }}
+                </div>
+                <div class="pitch-progress">
+                    <div class="fill {{ progress_status }} {{ progress_severity }}" style="width: {{ pitch_completion_percentage }}%"></div>
+                    <div class="progress-label">
+                        {{ pitch_count }} out of {{ monthly_pitch_count }} pitches
+                    </div>
+                    <div class="day-of-month-indicator" style="left: {{ month_completion_percentage }}%"></div>
+                </div>
+            </div>
+            <div class="feed">
+                {% for item in history %}
+                    <div class="feed-item">
+                        <div class="item-header">
+                            <img src="{{ item.getAvatarUrl() }}">
+                            {{ item.getBuzzstreamCreatedAtDate().format("M j, Y") }}
+                            {% if item.getWebsiteNames() %}
+                                - {{ item.getWebsiteNames() }}
+                            {% endif %}
+                            <span class="item-type">
+                                {% if item.getType() == 'Tweet' %}
+                                    <i class="fa fa-twitter"></i>
+                                {% elseif item.getType() == 'Note' %}
+                                    <i class="fa fa-comments"></i>
+                                {% elseif item.getType() == 'EMail' %}
+                                    <i class="fa fa-envelope"></i>
+                                {% elseif item.getType() == 'Stage' %}
+                                    <i class="fa fa-arrow-right"></i>
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="item-body">
+                            <div class="item-summary">
+                                {% if item.getType() == 'Tweet' and item.getSummary()|slice(0, 2) == 'DM' %}
+                                    <i>Private DM</i>
+                                {% else %}
+                                    {{ item.getSummary() }}
+                                {% endif %}
+                            </div>
+                            <div class="item-url" style="display: none;">{{ item.getBuzzstreamApiUrl() }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

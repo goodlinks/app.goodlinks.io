@@ -15,6 +15,17 @@ a {
     }
 }
 
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #F1F1F1;
+    margin: 2em;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .content-wrapper {
     max-width: 40em;
     margin-left: auto;
@@ -54,6 +65,11 @@ a {
     .project-summary {
         margin-bottom: 1em;
 
+        .date-range {
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
         i.padding-left {
             padding-left: 10px;
         }
@@ -69,6 +85,48 @@ a {
             font-size: 20px;
             line-height: 31px;
             font-weight: bold;
+        }
+
+        .pitch-progress {
+            margin-top: 15px;
+            border: solid 1px #efefef;
+            padding: 8px;
+            position: relative;
+            height: 25px;
+
+            .fill {
+                position: absolute;
+                width: 20%;
+                height: 42px;
+                margin-top: -9px;
+                margin-left: -8px;
+
+                background-color: #efefef;
+                &.ahead-schedule {
+                    background-color: #E4FFE4;
+                }
+                &.ahead-schedule.little {
+                    background-color: #FFF3DC;
+                }
+                &.behind-schedule {
+                    background-color: #FFE7E7;
+                }
+                &.behind-schedule.little {
+                    background-color: #FFF3DC;
+                }
+            }
+
+            .progress-label {
+                z-index: 9;
+                position: absolute;
+            }
+
+            .day-of-month-indicator {
+                border-right: solid 1px red;
+                height: 42px;
+                position: absolute;
+                margin-top: -9px;
+            }
         }
     }
 
