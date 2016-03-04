@@ -64,10 +64,11 @@
                     <i class="fa fa-link padding-left"></i> {{ placement_count }} {{ placement_count == 1 ? "placement" : "placements" }}
                 </div>
                 <div class="pitch-progress">
-                    <div class="fill {{ progress_status }} {{ progress_severity }}" style="width: {{ pitch_completion_percentage }}%"></div>
+                    <div class="fill {{ progress_status }} {{ progress_severity }}" style="width: {{ pitch_completion_percentage == 0 ? "100" : pitch_completion_percentage }}%"></div>
                     <div class="progress-label">
                         {{ pitch_count }} out of {{ monthly_pitch_count }} pitches
                     </div>
+
                     <div class="day-of-month-indicator" style="left: {{ month_completion_percentage }}%"></div>
                 </div>
             </div>

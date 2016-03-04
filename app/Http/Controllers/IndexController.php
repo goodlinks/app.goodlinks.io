@@ -45,8 +45,10 @@ class IndexController extends Controller
 
         foreach ($projects as & $projectData) {
             $projectData['pitch_count'] = $this->_getPitchCount($projectData);
-            $projectData['placement_count'] = $this->_getPlacementCount($projectData);
             $projectData['website_count'] = $this->_getWebsiteCount($projectData);
+            $projectData['introduction_count'] = $this->_getIntroductionCount($projectData);
+            $projectData['referral_count'] = $this->_getReferralCount($projectData);
+            $projectData['placement_count'] = $this->_getPlacementCount($projectData);
 
             $data = $this->_getProjectStatusData($projectData);
             $projectData['project_status'] = $data['project_status'];
@@ -70,7 +72,7 @@ class IndexController extends Controller
         ));
     }
 
-    protected function _getPitchCount($projectData)
+    protected function _getRelationshipStageCount($projectData, $stage)
     {
         $fromDate = $this->_getFromDate($projectData);
         $toDate = $fromDate->copy()->addMonth();
@@ -78,7 +80,7 @@ class IndexController extends Controller
         $count = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
             ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
             ->where('type', '=', 'Stage')
-            ->where('summary', 'like', 'Relationship stage changed to: Pitched')
+            ->where('summary', 'like', "Relationship stage changed to: $stage")
             ->leftJoin('history_item_websites', function($join) {
                 /** @var $join \Illuminate\Database\Query\JoinClause */
                 $join->on('history_item_websites.history_item_id', '=', 'history_items.id');
@@ -91,6 +93,26 @@ class IndexController extends Controller
             ->count();
 
         return $count;
+    }
+
+    protected function _getPitchCount($projectData)
+    {
+        return $this->_getRelationshipStageCount($projectData, 'Pitched');
+    }
+
+    protected function _getIntroductionCount($projectData)
+    {
+        return $this->_getRelationshipStageCount($projectData, 'Introduced');
+    }
+
+    protected function _getReferralCount($projectData)
+    {
+        return $this->_getRelationshipStageCount($projectData, 'Referred');
+    }
+
+    protected function _getPlacementCount($projectData)
+    {
+        return $this->_getRelationshipStageCount($projectData, 'Successful Placement');
     }
 
     protected function _getWebsiteCount($projectData)
@@ -114,29 +136,6 @@ class IndexController extends Controller
         return $count;
     }
 
-    protected function _getPlacementCount($projectData)
-    {
-        $fromDate = $this->_getFromDate($projectData);
-        $toDate = $fromDate->copy()->addMonth();
-
-        $count = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
-            ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
-            ->where('type', '=', 'Stage')
-            ->where('summary', 'like', '%Successful%')
-            ->leftJoin('history_item_websites', function($join) {
-                /** @var $join \Illuminate\Database\Query\JoinClause */
-                $join->on('history_item_websites.history_item_id', '=', 'history_items.id');
-            })
-            ->leftJoin('history_item_projects', function($join) {
-                /** @var $join \Illuminate\Database\Query\JoinClause */
-                $join->on('history_item_projects.history_item_id', '=', 'history_items.id');
-            })
-            ->where('history_item_projects.buzzstream_project_id', '=', $projectData['buzzstream_project_id'])
-            ->count();
-
-        return $count;
-    }
-
     protected function _getProjectStatusData($projectData)
     {
         $fromDate = $this->_getFromDate($projectData);
@@ -147,6 +146,7 @@ class IndexController extends Controller
         $daysIntoBillingPeriod = $today->diffInDays($fromDate);
         $percentBillingPeriodComplete = ($daysIntoBillingPeriod / 30) * 100;
         $percentPitchProgress = ($pitchCount / $monthlyPitchCount) * 100;
+        $percentPitchProgress = ($percentPitchProgress > 100) ? 100 : $percentPitchProgress;
 
         $diff = $percentPitchProgress - $percentBillingPeriodComplete;
         $status = $percentPitchProgress >= $percentBillingPeriodComplete ? "ahead-schedule" : "behind-schedule";
