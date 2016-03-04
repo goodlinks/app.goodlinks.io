@@ -13,6 +13,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton('command.goodlinks.import', function() {
+            return new \App\Console\Commands\ImportCommand();
+        });
+        $this->commands('command.goodlinks.import');
+
         //
     }
 }

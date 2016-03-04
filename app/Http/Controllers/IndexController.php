@@ -6,6 +6,7 @@ use App\Helper\TwigHelper;
 use App\Model\HistoryItem;
 use App\Model\HistoryItemProject;
 use App\Model\HistoryItemWebsite;
+use App\Model\Importer;
 
 use Carbon\Carbon;
 use GoodLinks\BuzzStreamFeed\Api;
@@ -249,61 +250,11 @@ class IndexController extends Controller
     public function importBuzzstreamInitial()
     {
         $before = microtime(true);
-        Api::setConsumerKey(getenv('BUZZSTREAM_CONSUMER_KEY'));
-        Api::setConsumerSecret(getenv('BUZZSTREAM_CONSUMER_SECRET'));
 
         $offset = isset($_GET['offset']) ? $_GET['offset'] : 0;
         $size = isset($_GET['size']) ? $_GET['size'] : 50;
 
-        $history = History::getList(null, null, $offset, $size);
-        if (empty($history)) {
-            return array(
-                'success' => true,
-                'complete'  => true,
-            );
-        }
-
-        $results = array();
-        $insertedCount = 0;
-
-        foreach ($history as $buzzstreamHistoryItem) {
-            $buzzstreamId = $buzzstreamHistoryItem->getBuzzstreamId();
-            $item = HistoryItem::findByBuzzstreamId($buzzstreamId);
-
-            if (! $item->getId()) {
-                $item = HistoryItem::create(array(
-                    'buzzstream_id'         => $buzzstreamId,
-                    'buzzstream_created_at' => $buzzstreamHistoryItem->getCreatedAt(),
-                    'type'                  => $buzzstreamHistoryItem->getType(),
-                    'summary'               => $buzzstreamHistoryItem->getSummary(),
-                    'body'                  => $buzzstreamHistoryItem->getBody(),
-                    'avatar_url'            => $buzzstreamHistoryItem->getAvatarUrl(),
-                    'website_names'         => $buzzstreamHistoryItem->getWebsiteNamesCsv(),
-                ));
-            }
-
-            $buzzstreamProjectIds = $buzzstreamHistoryItem->getBuzzstreamProjectIds();
-            DB::statement("DELETE FROM history_item_projects WHERE history_item_id = {$item->getId()}");
-
-            foreach ($buzzstreamProjectIds as $projectId) {
-                HistoryItemProject::create(array(
-                    'history_item_id'       => $item->getId(),
-                    'buzzstream_project_id' => $projectId,
-                ));
-            }
-
-            $buzzstreamWebsiteIds = $buzzstreamHistoryItem->getBuzzstreamWebsiteIds();
-            DB::statement("DELETE FROM history_item_websites WHERE history_item_id = {$item->getId()}");
-            foreach ($buzzstreamWebsiteIds as $websiteId) {
-                HistoryItemWebsite::create(array(
-                    'history_item_id'       => $item->getId(),
-                    'buzzstream_website_id' => $websiteId,
-                ));
-            }
-
-            $results[] = $item->toArray();
-            $insertedCount++;
-        }
+        list($insertedCount, $results) = Importer::import($offset, $size);
 
         $newOffset = $offset + $size;
         $nextProcessUrl = "/processFeedInitial?size=$size&offset=$newOffset";
