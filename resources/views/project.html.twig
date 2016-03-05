@@ -59,9 +59,19 @@
                 <div class="project-name">{{ project_data.name }}</div>
                 <div class="project-stats">
                     <i class="fa fa-eye"></i> {{ history|length }} events
-                    <i class="fa fa-user padding-left"></i> {{ website_count }} websites
+
+                    <i class="fa fa-user"></i> {{ website_count }} websites
                     <i class="fa fa-paper-plane-o padding-left"></i> {{ pitch_count }} {{ pitch_count == 1 ? "pitch" : "pitches" }}
-                    <i class="fa fa-link padding-left"></i> {{ placement_count }} {{ placement_count == 1 ? "placement" : "placements" }}
+
+                    {% if introduction_count %}
+                        <i class="fa fa-comments padding-left"></i> {{ introduction_count }} {{ introduction_count == 1 ? "introduction" : "introductions" }}
+                    {% endif %}
+                    {% if referral_count %}
+                        <i class="fa fa-money-o padding-left"></i> {{ referral_count }} {{ referral_count == 1 ? "referral" : "referrals" }}
+                    {% endif %}
+                    {% if placement_count %}
+                        <i class="fa fa-link padding-left"></i> {{ placement_count }} {{ placement_count == 1 ? "placement" : "placements" }}
+                    {% endif %}
                 </div>
                 <div class="pitch-progress">
                     <div class="fill {{ progress_status }} {{ progress_severity }}" style="width: {{ pitch_completion_percentage == 0 ? "100" : pitch_completion_percentage }}%"></div>

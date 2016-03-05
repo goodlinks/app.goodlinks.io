@@ -109,7 +109,7 @@ class IndexController extends Controller
     protected function _getReferralCount($projectData)
     {
         // I typo'd it initially as "Referrred"
-        return $this->_getRelationshipStageCount($projectData, 'Referr');
+        return $this->_getRelationshipStageCount($projectData, 'Referr%');
     }
 
     protected function _getPlacementCount($projectData)
@@ -215,6 +215,8 @@ class IndexController extends Controller
             "project_data"                  => $projectData,
             "website_count"                 => $websiteCount,
             "placement_count"               => $placementCount,
+            "introduction_count"            => $this->_getIntroductionCount($projectData),
+            "referral_count"                => $this->_getReferralCount($projectData),
             "pitch_count"                   => $projectData['pitch_count'],
             "progress_status"               => $data['project_status'],
             "progress_severity"             => $data['progress_severity'],

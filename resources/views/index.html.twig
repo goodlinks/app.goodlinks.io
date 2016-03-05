@@ -59,13 +59,16 @@
                     <div class="project-stats">
                         <i class="fa fa-user"></i> {{ project.website_count }} websites
                         <i class="fa fa-paper-plane-o padding-left"></i> {{ project.pitch_count }} {{ project.pitch_count == 1 ? "pitch" : "pitches" }}
+
                         {% if project.introduction_count %}
                             <i class="fa fa-comments padding-left"></i> {{ project.introduction_count }} {{ project.introduction_count == 1 ? "introduction" : "introductions" }}
                         {% endif %}
                         {% if project.referral_count %}
                             <i class="fa fa-money-o padding-left"></i> {{ project.referral_count }} {{ project.referral_count == 1 ? "referral" : "referrals" }}
                         {% endif %}
-                        <i class="fa fa-link padding-left"></i> {{ project.placement_count }} {{ project.placement_count == 1 ? "placement" : "placements" }}
+                        {% if project.placement_count %}
+                            <i class="fa fa-link padding-left"></i> {{ project.placement_count }} {{ project.placement_count == 1 ? "placement" : "placements" }}
+                        {% endif %}
                     </div>
                     <div class="pitch-progress">
                         <div class="fill {{ project.project_status }} {{ project.progress_severity }}" style="width: {{ project.pitch_completion_percentage == 0 ? "100" : project.pitch_completion_percentage }}%"></div>
