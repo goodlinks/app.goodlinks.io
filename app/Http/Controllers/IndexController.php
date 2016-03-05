@@ -108,7 +108,8 @@ class IndexController extends Controller
 
     protected function _getReferralCount($projectData)
     {
-        return $this->_getRelationshipStageCount($projectData, 'Referred');
+        // I typo'd it initially as "Referrred"
+        return $this->_getRelationshipStageCount($projectData, 'Referr');
     }
 
     protected function _getPlacementCount($projectData)
