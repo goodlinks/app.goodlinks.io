@@ -100,7 +100,7 @@ hr {
 }
 /* line 94, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .conversion-rate {
-  font-weight: bold;
+  color: green;
 }
 /* line 98, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .conversion-details {
