@@ -81,20 +81,32 @@ hr {
   padding-left: 10px;
 }
 /* line 77, ../scss/partial/_general.scss */
+.project-wrapper .project-summary i.padding-right {
+  padding-right: 10px;
+}
+/* line 81, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .project-thumbnail {
   float: right;
 }
-/* line 79, ../scss/partial/_general.scss */
+/* line 83, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .project-thumbnail img {
   width: 55px;
 }
-/* line 84, ../scss/partial/_general.scss */
+/* line 88, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .project-name {
   font-size: 20px;
   line-height: 31px;
   font-weight: bold;
 }
-/* line 90, ../scss/partial/_general.scss */
+/* line 94, ../scss/partial/_general.scss */
+.project-wrapper .project-summary .conversion-rate {
+  font-weight: bold;
+}
+/* line 98, ../scss/partial/_general.scss */
+.project-wrapper .project-summary .conversion-details {
+  font-size: 12px;
+}
+/* line 102, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress {
   margin-top: 15px;
   border: solid 1px #efefef;
@@ -102,7 +114,7 @@ hr {
   position: relative;
   height: 25px;
 }
-/* line 97, ../scss/partial/_general.scss */
+/* line 109, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .fill {
   position: absolute;
   width: 20%;
@@ -111,40 +123,40 @@ hr {
   margin-left: -8px;
   background-color: #efefef;
 }
-/* line 105, ../scss/partial/_general.scss */
+/* line 117, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .fill.ahead-schedule {
   background-color: #E4FFE4;
 }
-/* line 108, ../scss/partial/_general.scss */
+/* line 120, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .fill.ahead-schedule.little {
   background-color: #E4FFE4;
 }
-/* line 111, ../scss/partial/_general.scss */
+/* line 123, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .fill.behind-schedule {
   background-color: #FFE7E7;
 }
-/* line 114, ../scss/partial/_general.scss */
+/* line 126, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .fill.behind-schedule.little {
   background-color: #FFF3DC;
 }
-/* line 119, ../scss/partial/_general.scss */
+/* line 131, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .progress-label {
   z-index: 9;
   position: absolute;
 }
-/* line 124, ../scss/partial/_general.scss */
+/* line 136, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .day-of-month-indicator {
   border-right: solid 1px red;
   height: 42px;
   position: absolute;
   margin-top: -9px;
 }
-/* line 133, ../scss/partial/_general.scss */
+/* line 145, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item {
   margin-bottom: 1em;
   border: solid 1px #efefef;
 }
-/* line 137, ../scss/partial/_general.scss */
+/* line 149, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item img {
   width: 24px;
   display: inline-block;
@@ -153,7 +165,7 @@ hr {
   border-radius: 50%;
   border: solid 1px white;
 }
-/* line 146, ../scss/partial/_general.scss */
+/* line 158, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-header {
   background-color: #F9F9F9;
   font-size: 12px;
@@ -161,13 +173,13 @@ hr {
   font-weight: bold;
   padding: 0.5em;
 }
-/* line 153, ../scss/partial/_general.scss */
+/* line 165, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-header .item-type {
   float: right;
   font-size: 14px;
   color: #B5B5B5;
 }
-/* line 160, ../scss/partial/_general.scss */
+/* line 172, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-body {
   padding: 0.75em;
 }

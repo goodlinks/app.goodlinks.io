@@ -50,6 +50,9 @@ class IndexController extends Controller
             $projectData['introduction_count'] = $this->_getIntroductionCount($projectData);
             $projectData['referral_count'] = $this->_getReferralCount($projectData);
             $projectData['placement_count'] = $this->_getPlacementCount($projectData);
+            $projectData['link_agreed_count'] = $this->_getPlacementCount($projectData);
+            $projectData['conversion_count'] = $projectData['link_agreed_count'] + $projectData['placement_count'] + $projectData['introduction_count'] + $projectData['referral_count'];
+            $projectData['conversion_rate'] = ($projectData['pitch_count'] > 0) ? number_format($projectData['conversion_count'] / $projectData['pitch_count'] * 100, 1) : 0;
 
             $data = $this->_getProjectStatusData($projectData);
             $projectData['project_status'] = $data['project_status'];
@@ -115,6 +118,11 @@ class IndexController extends Controller
     protected function _getPlacementCount($projectData)
     {
         return $this->_getRelationshipStageCount($projectData, 'Successful Placement');
+    }
+
+    protected function _getLinkAgreedCount($projectData)
+    {
+        return $this->_getRelationshipStageCount($projectData, 'Link Agreed%');
     }
 
     protected function _getWebsiteCount($projectData)

@@ -49,7 +49,7 @@ class ImportCommand extends Command {
             $this->_success("Summary: " . $result['summary']);
         }
 
-        $this->info("Running");
+        $this->_success("Running");
     }
 
     protected function _success($message)
