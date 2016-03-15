@@ -12,7 +12,7 @@
         <script src="/js/external/jquery.min.js"></script>
         <link rel="shortcut icon" type="image/png" href="https://media.simplecast.com/podcast/favicon_image/1623/x16_1453500952-favicon.png" />
 
-        <title>Projects Overview | Goodlinks BuzzStream Feed</title>
+        <title>Team Overview | Goodlinks BuzzStream Feed</title>
     {% endblock %}
 </head>
 
@@ -45,52 +45,51 @@
                 </g>
             </g>
         </svg>
+        <h1>Team Overview</h1>
     </div>
     <div class="project-list">
-        {% for project in projects %}
-        {% if project.hide_in_summary != true %}
+        {% for user in users %}
             <div class="project-wrapper">
                 <div class="project-summary">
-                    <div class="project-thumbnail"><img src="{{ project.image }}"></div>
-                    <div class="project-name">{{ project.name }} </div>
+                    <div class="project-thumbnail"><img src="{{ user.image_url }}"></div>
+                    <div class="project-name">{{ user.name }} </div>
                     <div class="date-range">
-                        {{ project.from_date.format("M j") }} thru {{ project.to_date.format("M j") }}
+                        {{ from_date.format("M j") }} thru {{ to_date.format("M j") }}
                     </div>
                     <div class="project-stats">
-                        <span class="conversion-rate">
-                            <i class="fa fa-signal"></i> {{ project.conversion_rate }}%
-                        </span>
-                        <i class="fa fa-globe padding-left"></i> {{ project.website_count }} websites
-                        <i class="fa fa-paper-plane-o padding-left"></i> {{ project.pitch_count }} {{ project.pitch_count == 1 ? "pitch" : "pitches" }}
-                        <i class="fa fa-thumbs-o-up padding-left"></i> {{ project.conversion_count }} {{ project.conversion_count == 1 ? "conversion" : "conversions" }}
+                    <span class="conversion-rate">
+                        <i class="fa fa-signal"></i> {{ user.conversion_rate }}%
+                    </span>
+                        <i class="fa fa-globe padding-left"></i> {{ user.website_count }} websites
+                        <i class="fa fa-paper-plane-o padding-left"></i> {{ user.pitch_count }} {{ user.pitch_count == 1 ? "pitch" : "pitches" }}
+                        <i class="fa fa-thumbs-o-up padding-left"></i> {{ user.conversion_count }} {{ user.conversion_count == 1 ? "conversion" : "conversions" }}
                     </div>
                     <div class="conversion-details">
-                        {% if project.introduction_count %}
-                            <i class="fa fa-comments"></i> <span style="padding-right: 10px;">{{ project.introduction_count }} {{ project.introduction_count == 1 ? "introduction" : "introductions" }}</span>
+                        {% if user.introduction_count %}
+                            <i class="fa fa-comments"></i> <span style="padding-right: 10px;">{{ user.introduction_count }} {{ user.introduction_count == 1 ? "introduction" : "introductions" }}</span>
                         {% endif %}
-                        {% if project.referral_count %}
-                            <i class="fa fa-money"></i> <span style="padding-right: 10px;">{{ project.referral_count }} {{ project.referral_count == 1 ? "referral" : "referrals" }}</span>
+                        {% if user.referral_count %}
+                            <i class="fa fa-money"></i> <span style="padding-right: 10px;">{{ user.referral_count }} {{ user.referral_count == 1 ? "referral" : "referrals" }}</span>
                         {% endif %}
-                        {% if project.link_agreed_count %}
-                            <i class="fa fa-link"></i> <span style="padding-right: 10px;">{{ project.link_agreed_count }} {{ project.link_agreed_count == 1 ? "planned links" : "planned links" }}</span>
+                        {% if user.link_agreed_count %}
+                            <i class="fa fa-link"></i> <span style="padding-right: 10px;">{{ user.link_agreed_count }} {{ user.link_agreed_count == 1 ? "planned links" : "planned links" }}</span>
                         {% endif %}
-                        {% if project.placement_count %}
-                            <i class="fa fa-link"></i> <span style="padding-right: 10px;">{{ project.placement_count }} {{ project.placement_count == 1 ? "placement" : "placements" }}</span>
+                        {% if user.placement_count %}
+                            <i class="fa fa-link"></i> <span style="padding-right: 10px;">{{ user.placement_count }} {{ user.placement_count == 1 ? "placement" : "placements" }}</span>
                         {% endif %}
                     </div>
                     <div class="pitch-progress">
-                        <div class="fill {{ project.project_status }} {{ project.progress_severity }}" style="width: {{ project.pitch_completion_percentage == 0 ? "100" : project.pitch_completion_percentage }}%"></div>
+                        <div class="fill {{ user.progress_status }} {{ user.progress_severity }}" style="width: {{ user.pitch_completion_percentage == 0 ? "100" : user.pitch_completion_percentage }}%"></div>
                         <div class="progress-label">
-                            {{ project.pitch_count }} out of {{ monthly_pitch_count }} pitches
+                            {{ user.pitch_count }} out of {{ monthly_pitch_count }} pitches
                         </div>
-                        <div class="day-of-month-indicator" style="left: {{ project.billing_period_completion_percentage }}%"></div>
+                        <div class="day-of-month-indicator" style="left: {{ user.billing_period_completion_percentage }}%"></div>
                     </div>
                 </div>
             </div>
             {% if loop.last == false %}
                 <hr/>
             {% endif %}
-        {% endif %}
         {% endfor %}
     </div>
 </div>

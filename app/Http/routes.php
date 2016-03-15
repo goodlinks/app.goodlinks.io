@@ -5,6 +5,7 @@ if (env('APP_DEBUG')) {
 }
 
 $app->get( '/',                     'IndexController@index');
+$app->get( '/team',                 'IndexController@team');
 $app->get( '/project/{project_id}', 'IndexController@project');
 $app->get( '/import',               'IndexController@import');
 $app->get( '/importIncremental',    'IndexController@importBuzzstreamIncremental');

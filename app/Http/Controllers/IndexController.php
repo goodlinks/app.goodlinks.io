@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Helper\TwigHelper;
 use App\Model\HistoryItem;
-use App\Model\HistoryItemProject;
-use App\Model\HistoryItemWebsite;
 use App\Model\Importer;
 
 use Carbon\Carbon;
 use GoodLinks\BuzzStreamFeed\Api;
-use GoodLinks\BuzzStreamFeed\History;
+use GoodLinks\BuzzStreamFeed\User;
 use DB;
 
 class IndexController extends Controller
@@ -73,6 +71,91 @@ class IndexController extends Controller
             "body_class"            => "home",
             "projects"              => $projects,
             "monthly_pitch_count"   => $monthlyPitchCount,
+        ));
+    }
+
+    public function team()
+    {
+        Api::setConsumerKey(getenv('BUZZSTREAM_CONSUMER_KEY'));
+        Api::setConsumerSecret(getenv('BUZZSTREAM_CONSUMER_SECRET'));
+
+        $monthlyPitchCount = getenv('TEAM_MEMBER_MONTHLY_PITCH_COUNT');
+
+        $path = dirname(dirname(dirname(dirname(__FILE__)))) . "/.projects.json";
+        $projects = json_decode(file_get_contents($path), true);
+        if (! $projects) {
+            die("Couldn't find projects json data");
+        }
+
+        $fromDate = new Carbon("2016-03-01");
+        $toDate = $fromDate->copy()->addMonth();
+
+        $buzzstreamUsers = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
+            ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
+            ->where('type', '=', 'Stage')
+            ->where('summary', 'like', "Relationship stage changed to: Pitched")
+            ->whereNotNull('buzzstream_owner_id')
+            ->groupBy('buzzstream_owner_id')
+            ->select(array(
+                'buzzstream_owner_id as buzzstream_user_id',
+                DB::raw('count(*) as pitch_count'),
+            ))
+            ->get();
+
+        $users = array();
+        foreach ($buzzstreamUsers as $buzzstreamUserData) {
+            $buzzstreamUserUrl = "https://api.buzzstream.com/v1/users/" . $buzzstreamUserData['buzzstream_user_id'];
+            $buzzstreamUser = new User();
+            $buzzstreamUser->load($buzzstreamUserUrl);
+
+            $pitchCount = $this->_getPitchCountByUser($buzzstreamUser, $fromDate, $toDate);
+
+            $today = new Carbon();
+            $daysIntoBillingPeriod = $today->diffInDays($fromDate);
+            $percentBillingPeriodComplete = ($daysIntoBillingPeriod / 30) * 100;
+            $percentPitchProgress = ($pitchCount / $monthlyPitchCount) * 100;
+            $percentPitchProgress = ($percentPitchProgress > 100) ? 100 : $percentPitchProgress;
+
+            $diff = $percentPitchProgress - $percentBillingPeriodComplete;
+            $status = $percentPitchProgress >= $percentBillingPeriodComplete ? "ahead-schedule" : "behind-schedule";
+            $severity = abs($diff) >= 7 ? "lot" : "little";
+
+            $websiteCount = $this->_getWebsiteCountByUser($buzzstreamUser, $fromDate, $toDate);
+            $introductionCount = $this->_getIntroductionCountByUser($buzzstreamUser, $fromDate, $toDate);
+            $referralCount = $this->_getReferralCountByUser($buzzstreamUser, $fromDate, $toDate);
+            $placementCount = $this->_getReferralCountByUser($buzzstreamUser, $fromDate, $toDate);
+            $linkAgreedCount = $this->_getReferralCountByUser($buzzstreamUser, $fromDate, $toDate);
+            $conversionCount = $this->_getReferralCountByUser($buzzstreamUser, $fromDate, $toDate);
+            $conversionRate = ($pitchCount > 0) ? number_format($conversionCount / $pitchCount * 100, 1) : 0;
+
+            $users[] = array(
+                'name'                                  => $buzzstreamUser->getName(),
+                'email'                                 => $buzzstreamUser->getEmail(),
+                'image_url'                             => 'http://www.gravatar.com/avatar/' . md5($buzzstreamUser->getEmail()),
+                'pitch_completion_percentage'           => $percentPitchProgress,
+                'billing_period_completion_percentage'  => $percentBillingPeriodComplete,
+                'progress_status'                       => $status,
+                'progress_severity'                     => $severity,
+                'pitch_count'                           => $pitchCount,
+                'website_count'                         => $websiteCount,
+                'introduction_count'                    => $introductionCount,
+                'referral_count'                        => $referralCount,
+                'placement_count'                       => $placementCount,
+                'link_agreed_count'                     => $linkAgreedCount,
+                'conversion_count'                      => $conversionCount,
+                'conversion_rate'                       => $conversionRate,
+            );
+        }
+
+        $twig = TwigHelper::twig();
+
+        return $twig->render('team.html.twig', array(
+            "title"                 => "Team",
+            "body_class"            => "home",
+            "users"                 => $users,
+            "monthly_pitch_count"   => $monthlyPitchCount,
+            'from_date'             => $fromDate,
+            'to_date'               => $toDate,
         ));
     }
 
@@ -168,6 +251,89 @@ class IndexController extends Controller
             'pitch_completion_percentage'   => $percentPitchProgress,
             'billing_period_completion_percentage' => $percentBillingPeriodComplete,
         );
+    }
+
+    /*
+     * Need to refactor the *ByUser methods to dedup with the other methods based on project data
+     * Also need to move into models
+     */
+
+    /**
+     * @param $buzzStreamUser User
+     * @param $stage
+     * @param $fromDate Carbon
+     * @param $toDate Carbon
+     * @return int
+     */
+    protected function _getRelationshipStageCountByUser($buzzStreamUser, $stage, $fromDate, $toDate)
+    {
+        $count = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
+            ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
+            ->where('type', '=', 'Stage')
+            ->where('summary', 'like', "Relationship stage changed to: $stage")
+            ->leftJoin('history_item_websites', function($join) {
+                /** @var $join \Illuminate\Database\Query\JoinClause */
+                $join->on('history_item_websites.history_item_id', '=', 'history_items.id');
+            })
+            ->leftJoin('history_item_projects', function($join) {
+                /** @var $join \Illuminate\Database\Query\JoinClause */
+                $join->on('history_item_projects.history_item_id', '=', 'history_items.id');
+            })
+            ->where('history_items.buzzstream_owner_id', '=', $buzzStreamUser->getId())
+            ->count();
+
+        return $count;
+    }
+
+    protected function _getPitchCountByUser($buzzStreamUser, $fromDate, $toDate)
+    {
+        return $this->_getRelationshipStageCountByUser($buzzStreamUser, 'Pitched', $fromDate, $toDate);
+    }
+
+    protected function _getIntroductionCountByUser($buzzStreamUser, $fromDate, $toDate)
+    {
+        return $this->_getRelationshipStageCountByUser($buzzStreamUser, 'Introduced', $fromDate, $toDate);
+    }
+
+    protected function _getReferralCountByUser($buzzStreamUser, $fromDate, $toDate)
+    {
+        return $this->_getRelationshipStageCountByUser($buzzStreamUser, 'Referr%', $fromDate, $toDate);
+    }
+
+    protected function _getPlacementCountByUser($buzzStreamUser, $fromDate, $toDate)
+    {
+        return $this->_getRelationshipStageCountByUser($buzzStreamUser, 'Successful Placement', $fromDate, $toDate);
+    }
+
+    protected function _getLinkAgreedCountByUser($buzzStreamUser, $fromDate, $toDate)
+    {
+        return $this->_getRelationshipStageCountByUser($buzzStreamUser, 'Link Agreed%', $fromDate, $toDate);
+    }
+
+    /**
+     * @param $buzzStreamUser User
+     * @param $fromDate Carbon
+     * @param $toDate Carbon
+     * @return int
+     */
+    protected function _getWebsiteCountByUser($buzzStreamUser, $fromDate, $toDate)
+    {
+        $buzzStreamUserId = $buzzStreamUser->getId();
+
+        $count = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
+            ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
+            ->where('history_items.buzzstream_owner_id', '=', $buzzStreamUserId)
+            ->leftJoin('history_item_projects', function($join) {
+                /** @var $join \Illuminate\Database\Query\JoinClause */
+                $join->on('history_item_projects.history_item_id', '=', 'history_items.id');
+            })
+            ->leftJoin('history_item_websites', function($join) {
+                /** @var $join \Illuminate\Database\Query\JoinClause */
+                $join->on('history_item_websites.history_item_id', '=', 'history_items.id');
+            })
+            ->count(DB::raw('DISTINCT history_item_websites.buzzstream_website_id'));
+
+        return $count;
     }
 
     public function project($projectId)

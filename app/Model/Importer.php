@@ -34,6 +34,7 @@ class Importer
                     'body'                  => $buzzstreamHistoryItem->getBody(),
                     'avatar_url'            => $buzzstreamHistoryItem->getAvatarUrl(),
                     'website_names'         => $buzzstreamHistoryItem->getWebsiteNamesCsv(),
+                    'buzzstream_owner_id'   => $buzzstreamHistoryItem->getBuzzstreamOwnerId(),
                 ));
                 $insertedCount++;
             }
