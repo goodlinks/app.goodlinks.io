@@ -374,6 +374,7 @@ class IndexController extends Controller
 
         $websiteCount = $this->_getWebsiteCount($projectData);
         $placementCount = $this->_getPlacementCount($projectData);
+        $linkAgreedCount = $this->_getLinkAgreedCount($projectData);
         $monthlyConversionCount = getenv('MONTHLY_CONVERSION_COUNT');
 
         $twig = TwigHelper::twig();
@@ -392,6 +393,7 @@ class IndexController extends Controller
             "project_data"                      => $projectData,
             "website_count"                     => $websiteCount,
             "placement_count"                   => $placementCount,
+            "link_agreed_count"                 => $linkAgreedCount,
             "introduction_count"                => $this->_getIntroductionCount($projectData),
             "referral_count"                    => $this->_getReferralCount($projectData),
             "pitch_count"                       => $projectData['pitch_count'],

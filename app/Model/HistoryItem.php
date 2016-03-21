@@ -86,8 +86,11 @@ class HistoryItem extends Model
             return false;
         }
 
-        if (strpos($this->getSummary(), 'Introduced') !== false) {
-            return true;
+        $conversionStages = array('Introduced', 'Referred', 'Referrred', 'Link Agreed', 'Successful Placement');
+        foreach ($conversionStages as $stage) {
+            if (strpos($this->getSummary(), $stage) !== false) {
+                return true;
+            }
         }
 
         return false;
