@@ -92,6 +92,7 @@ class IndexController extends Controller
         $buzzstreamUsers = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
             ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
             ->where('type', '=', 'Stage')
+            ->where('is_ignored', '=', 0)
             ->where('summary', 'like', "Relationship stage changed to: Pitched")
             ->whereNotNull('buzzstream_owner_id')
             ->groupBy('buzzstream_owner_id')
@@ -166,6 +167,7 @@ class IndexController extends Controller
         $count = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
             ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
             ->where('type', '=', 'Stage')
+            ->where('is_ignored', '=', 0)
             ->where('summary', 'like', "Relationship stage changed to: $stage")
             ->leftJoin('history_item_websites', function($join) {
                 /** @var $join \Illuminate\Database\Query\JoinClause */
@@ -214,6 +216,7 @@ class IndexController extends Controller
 
         $count = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
             ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
+            ->where('is_ignored', '=', 0)
             ->where('history_item_projects.buzzstream_project_id', '=', $projectData['buzzstream_project_id'])
             ->leftJoin('history_item_projects', function($join) {
                 /** @var $join \Illuminate\Database\Query\JoinClause */
@@ -269,6 +272,7 @@ class IndexController extends Controller
         $count = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
             ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
             ->where('type', '=', 'Stage')
+            ->where('is_ignored', '=', 0)
             ->where('summary', 'like', "Relationship stage changed to: $stage")
             ->leftJoin('history_item_websites', function($join) {
                 /** @var $join \Illuminate\Database\Query\JoinClause */
@@ -321,6 +325,7 @@ class IndexController extends Controller
 
         $count = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
             ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
+            ->where('is_ignored', '=', 0)
             ->where('history_items.buzzstream_owner_id', '=', $buzzStreamUserId)
             ->leftJoin('history_item_projects', function($join) {
                 /** @var $join \Illuminate\Database\Query\JoinClause */
@@ -358,6 +363,7 @@ class IndexController extends Controller
 
         $historyItems = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
             ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
+            ->where('is_ignored', '=', 0)
             ->leftJoin('history_item_projects', function($join) {
                 /** @var $join \Illuminate\Database\Query\JoinClause */
                 $join->on('history_item_projects.history_item_id', '=', 'history_items.id');
