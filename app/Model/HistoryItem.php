@@ -75,4 +75,21 @@ class HistoryItem extends Model
 
         return new static;
     }
+
+    public function isConversion()
+    {
+        if ($this->getType() != 'Stage') {
+            return false;
+        }
+
+        if (strpos($this->getSummary(), 'Relationship stage changed') === false) {
+            return false;
+        }
+
+        if (strpos($this->getSummary(), 'Introduced') !== false) {
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -50,12 +50,11 @@ class IndexController extends Controller
             $projectData['placement_count'] = $this->_getPlacementCount($projectData);
             $projectData['link_agreed_count'] = $this->_getPlacementCount($projectData);
             $projectData['conversion_count'] = $projectData['link_agreed_count'] + $projectData['placement_count'] + $projectData['introduction_count'] + $projectData['referral_count'];
-            $projectData['conversion_rate'] = ($projectData['pitch_count'] > 0) ? number_format($projectData['conversion_count'] / $projectData['pitch_count'] * 100, 1) : 0;
 
             $data = $this->_getProjectStatusData($projectData);
             $projectData['project_status'] = $data['project_status'];
             $projectData['progress_severity'] = $data['progress_severity'];
-            $projectData['pitch_completion_percentage'] = $data['pitch_completion_percentage'];
+            $projectData['conversion_completion_percentage'] = $data['conversion_completion_percentage'];
             $projectData['billing_period_completion_percentage'] = $data['billing_period_completion_percentage'];
 
             $projectData['from_date'] = $this->_getFromDate($projectData);
@@ -64,13 +63,13 @@ class IndexController extends Controller
         }
 
         $twig = TwigHelper::twig();
-        $monthlyPitchCount = getenv('MONTHLY_PITCH_COUNT');
+        $monthlyConversionCount = getenv('MONTHLY_CONVERSION_COUNT');
 
         return $twig->render('index.html.twig', array(
-            "title"                 => "Projects",
-            "body_class"            => "home",
-            "projects"              => $projects,
-            "monthly_pitch_count"   => $monthlyPitchCount,
+            "title"                     => "Projects",
+            "body_class"                => "home",
+            "projects"                  => $projects,
+            "monthly_conversion_count"  => $monthlyConversionCount,
         ));
     }
 
@@ -232,24 +231,24 @@ class IndexController extends Controller
     protected function _getProjectStatusData($projectData)
     {
         $fromDate = $this->_getFromDate($projectData);
-        $pitchCount = $projectData['pitch_count'];
-        $monthlyPitchCount = getenv('MONTHLY_PITCH_COUNT');
+        $conversionCount = $projectData['conversion_count'];
+        $monthlyConversionCount = getenv('MONTHLY_CONVERSION_COUNT');
 
         $today = new Carbon();
         $daysIntoBillingPeriod = $today->diffInDays($fromDate);
         $percentBillingPeriodComplete = ($daysIntoBillingPeriod / 30) * 100;
-        $percentPitchProgress = ($pitchCount / $monthlyPitchCount) * 100;
-        $percentPitchProgress = ($percentPitchProgress > 100) ? 100 : $percentPitchProgress;
+        $percentConversionProgress = ($conversionCount / $monthlyConversionCount) * 100;
+        $percentConversionProgress = ($percentConversionProgress > 100) ? 100 : $percentConversionProgress;
 
-        $diff = $percentPitchProgress - $percentBillingPeriodComplete;
-        $status = $percentPitchProgress >= $percentBillingPeriodComplete ? "ahead-schedule" : "behind-schedule";
+        $diff = $percentConversionProgress - $percentBillingPeriodComplete;
+        $status = $percentConversionProgress >= $percentBillingPeriodComplete ? "ahead-schedule" : "behind-schedule";
         $severity = abs($diff) >= 7 ? "lot" : "little";
 
         return array(
-            'project_status' => $status,
-            'progress_severity' => $severity,
-            'pitch_completion_percentage'   => $percentPitchProgress,
-            'billing_period_completion_percentage' => $percentBillingPeriodComplete,
+            'project_status'                        => $status,
+            'progress_severity'                     => $severity,
+            'conversion_completion_percentage'      => $percentConversionProgress,
+            'billing_period_completion_percentage'  => $percentBillingPeriodComplete,
         );
     }
 
@@ -375,31 +374,36 @@ class IndexController extends Controller
 
         $websiteCount = $this->_getWebsiteCount($projectData);
         $placementCount = $this->_getPlacementCount($projectData);
-        $monthlyPitchCount = getenv('MONTHLY_PITCH_COUNT');
+        $monthlyConversionCount = getenv('MONTHLY_CONVERSION_COUNT');
 
         $twig = TwigHelper::twig();
 
         $projectData['pitch_count'] = $this->_getPitchCount($projectData);
+        $projectData['conversion_count'] = $this->_getLinkAgreedCount($projectData)
+            + $this->_getPlacementCount($projectData) + $this->_getIntroductionCount($projectData)
+            + $this->_getReferralCount($projectData);
+
         $data = $this->_getProjectStatusData($projectData);
 
         return $twig->render('project.html.twig', array(
-            "title"                         => "BuzzStream Feed",
-            "body_class"                    => "home",
-            "history"                       => $historyItems,
-            "project_data"                  => $projectData,
-            "website_count"                 => $websiteCount,
-            "placement_count"               => $placementCount,
-            "introduction_count"            => $this->_getIntroductionCount($projectData),
-            "referral_count"                => $this->_getReferralCount($projectData),
-            "pitch_count"                   => $projectData['pitch_count'],
-            "progress_status"               => $data['project_status'],
-            "progress_severity"             => $data['progress_severity'],
-            "pitch_completion_percentage"   => $data['pitch_completion_percentage'],
-            "month_completion_percentage"   => $data['billing_period_completion_percentage'],
-            "from_date"                     => $fromDate,
-            "to_date"                       => $toDate,
-            "monthly_pitch_count"           => $monthlyPitchCount,
-            "billing_start_date"            => new Carbon($projectData['billing_start_date']),
+            "title"                             => "BuzzStream Feed",
+            "body_class"                        => "home",
+            "history"                           => $historyItems,
+            "project_data"                      => $projectData,
+            "website_count"                     => $websiteCount,
+            "placement_count"                   => $placementCount,
+            "introduction_count"                => $this->_getIntroductionCount($projectData),
+            "referral_count"                    => $this->_getReferralCount($projectData),
+            "pitch_count"                       => $projectData['pitch_count'],
+            "conversion_count"                  => $projectData['conversion_count'],
+            "progress_status"                   => $data['project_status'],
+            "progress_severity"                 => $data['progress_severity'],
+            "conversion_completion_percentage"   => $data['conversion_completion_percentage'],
+            "month_completion_percentage"       => $data['billing_period_completion_percentage'],
+            "from_date"                         => $fromDate,
+            "to_date"                           => $toDate,
+            "monthly_conversion_count"          => $monthlyConversionCount,
+            "billing_start_date"                => new Carbon($projectData['billing_start_date']),
         ));
     }
 

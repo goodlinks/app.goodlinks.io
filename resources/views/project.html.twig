@@ -62,21 +62,26 @@
 
                     <i class="fa fa-user padding-left"></i> {{ website_count }} websites
                     <i class="fa fa-paper-plane-o padding-left"></i> {{ pitch_count }} {{ pitch_count == 1 ? "pitch" : "pitches" }}
-
+                    <i class="fa fa-thumbs-o-up padding-left"></i> {{ conversion_count }} {{ conversion_count == 1 ? "conversion" : "conversions" }}
+                </div>
+                <div class="conversion-details">
                     {% if introduction_count %}
-                        <i class="fa fa-comments padding-left"></i> {{ introduction_count }} {{ introduction_count == 1 ? "introduction" : "introductions" }}
+                        <i class="fa fa-comments"></i> <span style="padding-right: 10px;">{{ introduction_count }} {{ introduction_count == 1 ? "introduction" : "introductions" }}</span>
                     {% endif %}
                     {% if referral_count %}
-                        <i class="fa fa-money padding-left"></i> {{ referral_count }} {{ referral_count == 1 ? "referral" : "referrals" }}
+                        <i class="fa fa-money"></i> <span style="padding-right: 10px;">{{ referral_count }} {{ referral_count == 1 ? "referral" : "referrals" }}</span>
+                    {% endif %}
+                    {% if link_agreed_count %}
+                        <i class="fa fa-link"></i> <span style="padding-right: 10px;">{{ link_agreed_count }} {{ link_agreed_count == 1 ? "planned links" : "planned links" }}</span>
                     {% endif %}
                     {% if placement_count %}
-                        <i class="fa fa-link padding-left"></i> {{ placement_count }} {{ placement_count == 1 ? "placement" : "placements" }}
+                        <i class="fa fa-link"></i> <span style="padding-right: 10px;">{{ placement_count }} {{ placement_count == 1 ? "placement" : "placements" }}</span>
                     {% endif %}
                 </div>
                 <div class="pitch-progress">
-                    <div class="fill {{ progress_status }} {{ progress_severity }}" style="width: {{ pitch_completion_percentage == 0 ? "100" : pitch_completion_percentage }}%"></div>
+                    <div class="fill {{ progress_status }} {{ progress_severity }}" style="width: {{ conversion_completion_percentage == 0 ? "100" : conversion_completion_percentage }}%"></div>
                     <div class="progress-label">
-                        {{ pitch_count }} out of {{ monthly_pitch_count }} pitches
+                        {{ conversion_count }} out of {{ monthly_conversion_count }} conversions
                     </div>
 
                     <div class="day-of-month-indicator" style="left: {{ month_completion_percentage }}%"></div>
@@ -102,6 +107,7 @@
                                     <i class="fa fa-arrow-right"></i>
                                 {% endif %}
                             </span>
+                            <span class="conversion">{{ item.isConversion() ? "Conversion" : "" }}</span>
                         </div>
                         <div class="item-body">
                             <div class="item-summary">

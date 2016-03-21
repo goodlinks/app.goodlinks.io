@@ -57,10 +57,7 @@
                         {{ project.from_date.format("M j") }} thru {{ project.to_date.format("M j") }}
                     </div>
                     <div class="project-stats">
-                        <span class="conversion-rate">
-                            <i class="fa fa-signal"></i> {{ project.conversion_rate }}%
-                        </span>
-                        <i class="fa fa-globe padding-left"></i> {{ project.website_count }} websites
+                        <i class="fa fa-globe"></i> {{ project.website_count }} websites
                         <i class="fa fa-paper-plane-o padding-left"></i> {{ project.pitch_count }} {{ project.pitch_count == 1 ? "pitch" : "pitches" }}
                         <i class="fa fa-thumbs-o-up padding-left"></i> {{ project.conversion_count }} {{ project.conversion_count == 1 ? "conversion" : "conversions" }}
                     </div>
@@ -79,9 +76,9 @@
                         {% endif %}
                     </div>
                     <div class="pitch-progress">
-                        <div class="fill {{ project.project_status }} {{ project.progress_severity }}" style="width: {{ project.pitch_completion_percentage == 0 ? "100" : project.pitch_completion_percentage }}%"></div>
+                        <div class="fill {{ project.project_status }} {{ project.progress_severity }}" style="width: {{ project.conversion_completion_percentage == 0 ? "100" : project.conversion_completion_percentage }}%"></div>
                         <div class="progress-label">
-                            {{ project.pitch_count }} out of {{ monthly_pitch_count }} pitches
+                            {{ project.conversion_count }} out of {{ monthly_conversion_count }} conversions
                         </div>
                         <div class="day-of-month-indicator" style="left: {{ project.billing_period_completion_percentage }}%"></div>
                     </div>

@@ -183,12 +183,19 @@ hr {
   padding: 0.5em;
 }
 /* line 174, ../scss/partial/_general.scss */
+.project-wrapper .feed .feed-item .item-header .conversion {
+  float: right;
+  padding-right: 1em;
+  line-height: 27px;
+  color: green;
+}
+/* line 181, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-header .item-type {
   float: right;
   font-size: 14px;
   color: #B5B5B5;
 }
-/* line 181, ../scss/partial/_general.scss */
+/* line 188, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-body {
   padding: 0.75em;
 }

@@ -171,6 +171,13 @@ hr {
             font-weight: bold;
             padding: 0.5em;
 
+            .conversion {
+                float: right;
+                padding-right: 1em;
+                line-height: 27px;
+                color: green;
+            }
+
             .item-type {
                 float: right;
                 font-size: 14px;
