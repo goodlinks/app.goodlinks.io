@@ -15,28 +15,9 @@ class IndexController extends Controller
 {
     protected function _getFromDate($projectData)
     {
-        if (isset($_GET['from'])) {
-            $fromDate = new Carbon($_GET['from']);
-            return $fromDate;
-        }
-
-        $projectData = $this->_getProjectData($projectData['id']);
-
-        $fromDate = new Carbon($projectData['billing_start_date']);
-        $toDate = $fromDate->copy()->addMonth(1);
-        $today = new Carbon();
-
-        while ($toDate < $today) {
-            $fromDate->addMonth(1);
-            $toDate->addMonth(1);
-        }
-
-        // If you want to see 2 months at once, you can do that with
-        // ?months=2
-        if (isset($_GET['months'])) {
-            $months = (int)$_GET['months'] - 1;
-            $fromDate->subMonths($months);
-        }
+        $toDate = $this->_getToDate($projectData);
+        $months = $this->_getMonthCount($projectData);
+        $fromDate = $toDate->copy()->subMonths($months);
 
         return $fromDate;
     }
@@ -47,17 +28,30 @@ class IndexController extends Controller
      */
     protected function _getToDate($projectData)
     {
-        $fromDate = $this->_getFromDate($projectData);
-        $toDate = $fromDate->copy()->addMonth();
+        $billingStartDate = new Carbon($projectData['billing_start_date']);
+        $today = new Carbon();
+        $toDate = $billingStartDate->copy();
 
-        // If you want to see 2 months at once, you can do that with
-        // ?months=2
-        if (isset($_GET['months'])) {
-            $months = (int)$_GET['months'] - 1;
-            $toDate->addMonths($months);
+        while ($toDate < $today) {
+            $toDate->addMonth();
         }
 
         return $toDate;
+    }
+
+    protected function _getMonthCount($projectData)
+    {
+        $months = isset($_GET['months']) ? $_GET['months'] : 1;
+        $billingStartDate = new Carbon($projectData['billing_start_date']);
+        $toDate = $this->_getToDate($projectData);
+        $fromDate = $toDate->copy()->subMonths($months);
+
+        while ($fromDate < $billingStartDate) {
+            $fromDate->addMonth(1);
+            $months--;
+        }
+
+        return $months;
     }
 
     public function index()
@@ -85,10 +79,11 @@ class IndexController extends Controller
 
             $projectData['from_date'] = $this->_getFromDate($projectData);
             $projectData['to_date'] = $this->_getToDate($projectData);
+            $projectData['months'] = $this->_getMonthCount($projectData);
+            $projectData['monthly_conversion_count'] = getenv('MONTHLY_CONVERSION_COUNT') * $projectData['months'];
         }
 
         $twig = TwigHelper::twig();
-        $monthlyConversionCount = getenv('MONTHLY_CONVERSION_COUNT');
 
         $adminIPs = array_map('trim', explode(',', env('ADMIN_IPS')));
         $isAdmin = isset($_SERVER['REMOTE_ADDR']) ? (in_array($_SERVER['REMOTE_ADDR'], $adminIPs)) : false;
@@ -98,7 +93,6 @@ class IndexController extends Controller
             "body_class"                => "home",
             "projects"                  => $projects,
             "is_admin"                  => $isAdmin,
-            "monthly_conversion_count"  => $monthlyConversionCount,
         ));
     }
 
@@ -262,13 +256,14 @@ class IndexController extends Controller
 
     protected function _getProjectStatusData($projectData)
     {
+        $months = $this->_getMonthCount($projectData);
         $fromDate = $this->_getFromDate($projectData);
         $conversionCount = $projectData['conversion_count'];
-        $monthlyConversionCount = getenv('MONTHLY_CONVERSION_COUNT');
+        $monthlyConversionCount = getenv('MONTHLY_CONVERSION_COUNT') * $months;
 
         $today = new Carbon();
         $daysIntoBillingPeriod = $today->diffInDays($fromDate);
-        $percentBillingPeriodComplete = ($daysIntoBillingPeriod / 30) * 100;
+        $percentBillingPeriodComplete = ($daysIntoBillingPeriod / (30 * $months)) * 100;
         $percentConversionProgress = ($conversionCount / $monthlyConversionCount) * 100;
         $percentConversionProgress = ($percentConversionProgress > 100) ? 100 : $percentConversionProgress;
 

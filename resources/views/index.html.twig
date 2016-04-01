@@ -54,7 +54,7 @@
                     <div class="project-thumbnail"><img src="{{ project.image }}"></div>
                     <div class="project-name">{{ project.name }} </div>
                     <div class="date-range">
-                        {{ project.from_date.format("M j") }} thru {{ project.to_date.format("M j") }}
+                        {{ project.from_date.format("M j") }} thru {{ project.to_date.format("M j") }} ({{ project.months }} {{ project.months == 1 ? "month" : "months"}})
                     </div>
                     <div class="project-stats">
                         <i class="fa fa-globe"></i> {{ project.website_count }} websites
@@ -78,7 +78,7 @@
                     <div class="pitch-progress">
                         <div class="fill {{ project.project_status }} {{ project.progress_severity }}" style="width: {{ project.conversion_completion_percentage == 0 ? "100" : project.conversion_completion_percentage }}%"></div>
                         <div class="progress-label">
-                            {{ project.conversion_count }} out of {{ monthly_conversion_count }} conversions
+                            {{ project.conversion_count }} out of {{ project.monthly_conversion_count }} conversions
                         </div>
                         <div class="day-of-month-indicator" style="left: {{ project.billing_period_completion_percentage }}%"></div>
                     </div>
