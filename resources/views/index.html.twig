@@ -48,7 +48,7 @@
     </div>
     <div class="project-list">
         {% for project in projects %}
-        {% if project.hide_in_summary != true %}
+        {% if project.active and (project.admin_only == false or is_admin) %}
             <div class="project-wrapper">
                 <div class="project-summary">
                     <div class="project-thumbnail"><img src="{{ project.image }}"></div>

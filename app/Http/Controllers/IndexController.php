@@ -90,10 +90,14 @@ class IndexController extends Controller
         $twig = TwigHelper::twig();
         $monthlyConversionCount = getenv('MONTHLY_CONVERSION_COUNT');
 
+        $adminIPs = array_map('trim', explode(',', env('ADMIN_IPS')));
+        $isAdmin = isset($_SERVER['REMOTE_ADDR']) ? (in_array($_SERVER['REMOTE_ADDR'], $adminIPs)) : false;
+
         return $twig->render('index.html.twig', array(
             "title"                     => "Projects",
             "body_class"                => "home",
             "projects"                  => $projects,
+            "is_admin"                  => $isAdmin,
             "monthly_conversion_count"  => $monthlyConversionCount,
         ));
     }
