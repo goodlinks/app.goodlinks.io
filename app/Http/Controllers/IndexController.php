@@ -31,7 +31,33 @@ class IndexController extends Controller
             $toDate->addMonth(1);
         }
 
+        // If you want to see 2 months at once, you can do that with
+        // ?months=2
+        if (isset($_GET['months'])) {
+            $months = (int)$_GET['months'] - 1;
+            $fromDate->subMonths($months);
+        }
+
         return $fromDate;
+    }
+
+    /**
+     * @param $projectData
+     * @return Carbon
+     */
+    protected function _getToDate($projectData)
+    {
+        $fromDate = $this->_getFromDate($projectData);
+        $toDate = $fromDate->copy()->addMonth();
+
+        // If you want to see 2 months at once, you can do that with
+        // ?months=2
+        if (isset($_GET['months'])) {
+            $months = (int)$_GET['months'] - 1;
+            $toDate->addMonths($months);
+        }
+
+        return $toDate;
     }
 
     public function index()
@@ -58,8 +84,7 @@ class IndexController extends Controller
             $projectData['billing_period_completion_percentage'] = $data['billing_period_completion_percentage'];
 
             $projectData['from_date'] = $this->_getFromDate($projectData);
-            $projectData['to_date'] = $projectData['from_date']->copy()->addMonth(1);
-
+            $projectData['to_date'] = $this->_getToDate($projectData);
         }
 
         $twig = TwigHelper::twig();
@@ -162,7 +187,7 @@ class IndexController extends Controller
     protected function _getRelationshipStageCount($projectData, $stage)
     {
         $fromDate = $this->_getFromDate($projectData);
-        $toDate = $fromDate->copy()->addMonth();
+        $toDate = $this->_getToDate($projectData);
 
         $count = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
             ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
@@ -212,7 +237,7 @@ class IndexController extends Controller
     protected function _getWebsiteCount($projectData)
     {
         $fromDate = $this->_getFromDate($projectData);
-        $toDate = $fromDate->copy()->addMonth();
+        $toDate = $this->_getToDate($projectData);
 
         $count = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
             ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
@@ -353,7 +378,7 @@ class IndexController extends Controller
         Api::setConsumerSecret(getenv('BUZZSTREAM_CONSUMER_SECRET'));
 
         $fromDate = $this->_getFromDate($projectData);
-        $toDate = $fromDate->copy()->addMonth(1);
+        $toDate = $this->_getToDate($projectData);
 
         $excludedWebsiteIds = array(
             56013240,
