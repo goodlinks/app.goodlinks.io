@@ -1,0 +1,26 @@
+[
+  {
+    "id": "exampleclient",
+    "active": true,
+    "admin_only": false,
+    "monthly_conversion_count": 5,
+    "secret": "for-client-only-abc-123-xyz",
+    "name": "Example Client",
+    "billing_start_date": "2016-03-25",
+    "image": "https://app.buzzstream.com/twitterAvatar?id=twitter_handle&h=64&w=64",
+    "buzzstream_project_id": 99999,
+    "buzzstream_api_url": "https://api.buzzstream.com/v1/projects/99999"
+  },
+  {
+    "id": "anotherclient",
+    "active": true,
+    "admin_only": false,
+    "monthly_conversion_count": 5,
+    "secret": "for-client-only-abc-123-xyz",
+    "name": "Another Client",
+    "billing_start_date": "2016-03-25",
+    "image": "https://app.buzzstream.com/twitterAvatar?id=twitter_handle&h=64&w=64",
+    "buzzstream_project_id": 99999,
+    "buzzstream_api_url": "https://api.buzzstream.com/v1/projects/99999"
+  }
+]

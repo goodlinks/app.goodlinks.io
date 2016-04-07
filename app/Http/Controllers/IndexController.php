@@ -80,7 +80,7 @@ class IndexController extends Controller
             $projectData['from_date'] = $this->_getFromDate($projectData);
             $projectData['to_date'] = $this->_getToDate($projectData);
             $projectData['months'] = $this->_getMonthCount($projectData);
-            $projectData['monthly_conversion_count'] = getenv('MONTHLY_CONVERSION_COUNT') * $projectData['months'];
+            $projectData['monthly_conversion_count'] = $projectData['monthly_conversion_count'] * $projectData['months'];
         }
 
         $twig = TwigHelper::twig();
@@ -259,7 +259,7 @@ class IndexController extends Controller
         $months = $this->_getMonthCount($projectData);
         $fromDate = $this->_getFromDate($projectData);
         $conversionCount = $projectData['conversion_count'];
-        $monthlyConversionCount = getenv('MONTHLY_CONVERSION_COUNT') * $months;
+        $monthlyConversionCount = $projectData['monthly_conversion_count'] * $months;
 
         $today = new Carbon();
         $daysIntoBillingPeriod = $today->diffInDays($fromDate);
@@ -405,7 +405,7 @@ class IndexController extends Controller
         $websiteCount = $this->_getWebsiteCount($projectData);
         $placementCount = $this->_getPlacementCount($projectData);
         $linkAgreedCount = $this->_getLinkAgreedCount($projectData);
-        $monthlyConversionCount = getenv('MONTHLY_CONVERSION_COUNT');
+        $monthlyConversionCount = $projectData['monthly_conversion_count'];
 
         $twig = TwigHelper::twig();
 
