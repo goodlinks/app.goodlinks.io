@@ -5,12 +5,15 @@
     {% block head %}
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="/css/external/tooltipster.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
         {# If these are async the button wave didn't work right at one point.  Seems to
            be working now though. #}
         <script src="/js/external/jquery.min.js"></script>
         <link rel="shortcut icon" type="image/png" href="https://media.simplecast.com/podcast/favicon_image/1623/x16_1453500952-favicon.png" />
+
+        <script src="/js/external/jquery.tooltipster.js"></script>
 
         <title>Projects Overview | Goodlinks BuzzStream Feed</title>
     {% endblock %}
@@ -63,16 +66,28 @@
                     </div>
                     <div class="conversion-details">
                         {% if project.introduction_count %}
-                            <i class="fa fa-comments"></i> <span style="padding-right: 10px;">{{ project.introduction_count }} {{ project.introduction_count == 1 ? "introduction" : "introductions" }}</span>
+                            <i class="fa fa-comments"></i>
+                            <span class="tooltip conversion-count" title="{% for item in project.introduction_items %}{{ item.getWebsiteNames() }}{{ loop.last ? "" : ", " }}{% endfor %}">
+                                {{ project.introduction_count }} {{ project.introduction_count == 1 ? "introduction" : "introductions" }}
+                            </span>
                         {% endif %}
                         {% if project.referral_count %}
-                            <i class="fa fa-money"></i> <span style="padding-right: 10px;">{{ project.referral_count }} {{ project.referral_count == 1 ? "referral" : "referrals" }}</span>
+                            <i class="fa fa-money"></i>
+                            <span class="tooltip conversion-count" title="{% for item in project.referral_items %}{{ item.getWebsiteNames() }}{{ loop.last ? "" : ", " }}{% endfor %}">
+                                {{ project.referral_count }} {{ project.referral_count == 1 ? "referral" : "referrals" }}
+                            </span>
                         {% endif %}
                         {% if project.link_agreed_count %}
-                            <i class="fa fa-link"></i> <span style="padding-right: 10px;">{{ project.link_agreed_count }} {{ project.link_agreed_count == 1 ? "planned links" : "planned links" }}</span>
+                            <i class="fa fa-link"></i>
+                            <span class="tooltip conversion-count" title="{% for item in project.link_agreed_items %}{{ item.getWebsiteNames() }}{{ loop.last ? "" : ", " }}{% endfor %}">
+                                {{ project.link_agreed_count }} {{ project.link_agreed_count == 1 ? "planned links" : "planned links" }}
+                            </span>
                         {% endif %}
                         {% if project.placement_count %}
-                            <i class="fa fa-link"></i> <span style="padding-right: 10px;">{{ project.placement_count }} {{ project.placement_count == 1 ? "placement" : "placements" }}</span>
+                            <i class="fa fa-link"></i>
+                            <span class="tooltip conversion-count" title="{% for item in project.placement_items %}{{ item.getWebsiteNames() }}{{ loop.last ? "" : ", " }}{% endfor %}">
+                                {{ project.placement_count }} {{ project.placement_count == 1 ? "placement" : "placements" }}
+                            </span>
                         {% endif %}
                     </div>
                     <div class="pitch-progress">
@@ -91,5 +106,10 @@
         {% endfor %}
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.tooltip').tooltipster();
+    });
+</script>
 </body>
 </html>

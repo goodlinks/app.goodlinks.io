@@ -106,6 +106,10 @@ hr {
 
         .conversion-details {
             font-size: 12px;
+            .conversion-count {
+                padding-right: 10px;
+                cursor: help;
+            }
         }
 
         .pitch-progress {

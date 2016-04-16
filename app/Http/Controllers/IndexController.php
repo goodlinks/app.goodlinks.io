@@ -71,6 +71,11 @@ class IndexController extends Controller
             $projectData['link_agreed_count'] = $this->_getLinkAgreedCount($projectData);
             $projectData['conversion_count'] = $projectData['link_agreed_count'] + $projectData['placement_count'] + $projectData['introduction_count'] + $projectData['referral_count'];
 
+            $projectData['introduction_items'] = $this->_getIntroductionItems($projectData);
+            $projectData['referral_itesm'] = $this->_getReferralItems($projectData);
+            $projectData['placement_items'] = $this->_getPlacementItems($projectData);
+            $projectData['link_agreed_items'] = $this->_getLinkAgreedItems($projectData);
+
             $data = $this->_getProjectStatusData($projectData);
             $projectData['project_status'] = $data['project_status'];
             $projectData['progress_severity'] = $data['progress_severity'];
@@ -206,6 +211,30 @@ class IndexController extends Controller
         return $count;
     }
 
+    protected function _getItemsByRelationshipStage($projectData, $stage)
+    {
+        $fromDate = $this->_getFromDate($projectData);
+        $toDate = $this->_getToDate($projectData);
+
+        $collection = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
+            ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
+            ->where('type', '=', 'Stage')
+            ->where('is_ignored', '=', 0)
+            ->where('summary', 'like', "Relationship stage changed to: $stage")
+            ->leftJoin('history_item_websites', function($join) {
+                /** @var $join \Illuminate\Database\Query\JoinClause */
+                $join->on('history_item_websites.history_item_id', '=', 'history_items.id');
+            })
+            ->leftJoin('history_item_projects', function($join) {
+                /** @var $join \Illuminate\Database\Query\JoinClause */
+                $join->on('history_item_projects.history_item_id', '=', 'history_items.id');
+            })
+            ->where('history_item_projects.buzzstream_project_id', '=', $projectData['buzzstream_project_id'])
+            ->get();
+
+        return $collection;
+    }
+
     protected function _getPitchCount($projectData)
     {
         return $this->_getRelationshipStageCount($projectData, 'Pitched');
@@ -230,6 +259,27 @@ class IndexController extends Controller
     protected function _getLinkAgreedCount($projectData)
     {
         return $this->_getRelationshipStageCount($projectData, 'Link Agreed%');
+    }
+
+    protected function _getIntroductionItems($projectData)
+    {
+        return $this->_getItemsByRelationshipStage($projectData, 'Introduced');
+    }
+
+    protected function _getReferralItems($projectData)
+    {
+        // I typo'd it initially as "Referrred"
+        return $this->_getItemsByRelationshipStage($projectData, 'Referr%');
+    }
+
+    protected function _getPlacementItems($projectData)
+    {
+        return $this->_getItemsByRelationshipStage($projectData, 'Successful Placement');
+    }
+
+    protected function _getLinkAgreedItems($projectData)
+    {
+        return $this->_getItemsByRelationshipStage($projectData, 'Link Agreed%');
     }
 
     protected function _getWebsiteCount($projectData)
