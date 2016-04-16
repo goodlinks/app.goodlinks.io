@@ -72,7 +72,7 @@ class IndexController extends Controller
             $projectData['conversion_count'] = $projectData['link_agreed_count'] + $projectData['placement_count'] + $projectData['introduction_count'] + $projectData['referral_count'];
 
             $projectData['introduction_items'] = $this->_getIntroductionItems($projectData);
-            $projectData['referral_itesm'] = $this->_getReferralItems($projectData);
+            $projectData['referral_items'] = $this->_getReferralItems($projectData);
             $projectData['placement_items'] = $this->_getPlacementItems($projectData);
             $projectData['link_agreed_items'] = $this->_getLinkAgreedItems($projectData);
 
