@@ -97,6 +97,21 @@
                         </div>
                         <div class="day-of-month-indicator" style="left: {{ project.billing_period_completion_percentage }}%"></div>
                     </div>
+                    {% if project.paid_content %}
+                        <div class="paid-content-title">
+                            <i class="fa fa-pencil"></i>
+                            <span class="tooltip conversion-count" title="{% for item in project.paid_content.articles %}{{ item.getDescription() }}{{ loop.last ? "" : ", " }}{% endfor %}">
+                                {{ project.paid_content.article_count }} {{ project.paid_content.article_count == 1 ? "article" : "articles" }}
+                            </span>
+                        </div>
+                        <div class="paid-content-progress">
+                            <div class="fill {{ project.paid_content.status }} {{ project.paid_content.severity }}" style="width: {{ project.paid_content.completion_percentage == 0 ? "100" : project.paid_content.completion_percentage }}%"></div>
+                            <div class="progress-label">
+                                {{ project.paid_content.word_count }} out of {{ project.monthly_word_count }} words
+                            </div>
+                            <div class="day-of-month-indicator" style="left: {{ project.billing_period_completion_percentage }}%"></div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
             {% if loop.last == false %}

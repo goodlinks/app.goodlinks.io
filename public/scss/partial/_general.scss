@@ -112,7 +112,7 @@ hr {
             }
         }
 
-        .pitch-progress {
+        .pitch-progress, .paid-content-progress {
             margin-top: 15px;
             border: solid 1px #efefef;
             padding: 8px;
@@ -152,6 +152,10 @@ hr {
                 position: absolute;
                 margin-top: -9px;
             }
+        }
+
+        .paid-content-title {
+            margin-top: 1em;
         }
     }
 

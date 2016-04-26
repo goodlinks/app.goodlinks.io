@@ -121,7 +121,7 @@ hr {
   cursor: help;
 }
 /* line 115, ../scss/partial/_general.scss */
-.project-wrapper .project-summary .pitch-progress {
+.project-wrapper .project-summary .pitch-progress, .project-wrapper .project-summary .paid-content-progress {
   margin-top: 15px;
   border: solid 1px #efefef;
   padding: 8px;
@@ -129,7 +129,7 @@ hr {
   height: 25px;
 }
 /* line 122, ../scss/partial/_general.scss */
-.project-wrapper .project-summary .pitch-progress .fill {
+.project-wrapper .project-summary .pitch-progress .fill, .project-wrapper .project-summary .paid-content-progress .fill {
   position: absolute;
   width: 20%;
   height: 42px;
@@ -138,39 +138,43 @@ hr {
   background-color: #efefef;
 }
 /* line 130, ../scss/partial/_general.scss */
-.project-wrapper .project-summary .pitch-progress .fill.ahead-schedule {
+.project-wrapper .project-summary .pitch-progress .fill.ahead-schedule, .project-wrapper .project-summary .paid-content-progress .fill.ahead-schedule {
   background-color: #E4FFE4;
 }
 /* line 133, ../scss/partial/_general.scss */
-.project-wrapper .project-summary .pitch-progress .fill.ahead-schedule.little {
+.project-wrapper .project-summary .pitch-progress .fill.ahead-schedule.little, .project-wrapper .project-summary .paid-content-progress .fill.ahead-schedule.little {
   background-color: #E4FFE4;
 }
 /* line 136, ../scss/partial/_general.scss */
-.project-wrapper .project-summary .pitch-progress .fill.behind-schedule {
+.project-wrapper .project-summary .pitch-progress .fill.behind-schedule, .project-wrapper .project-summary .paid-content-progress .fill.behind-schedule {
   background-color: #FFE7E7;
 }
 /* line 139, ../scss/partial/_general.scss */
-.project-wrapper .project-summary .pitch-progress .fill.behind-schedule.little {
+.project-wrapper .project-summary .pitch-progress .fill.behind-schedule.little, .project-wrapper .project-summary .paid-content-progress .fill.behind-schedule.little {
   background-color: #FFF3DC;
 }
 /* line 144, ../scss/partial/_general.scss */
-.project-wrapper .project-summary .pitch-progress .progress-label {
+.project-wrapper .project-summary .pitch-progress .progress-label, .project-wrapper .project-summary .paid-content-progress .progress-label {
   z-index: 9;
   position: absolute;
 }
 /* line 149, ../scss/partial/_general.scss */
-.project-wrapper .project-summary .pitch-progress .day-of-month-indicator {
+.project-wrapper .project-summary .pitch-progress .day-of-month-indicator, .project-wrapper .project-summary .paid-content-progress .day-of-month-indicator {
   border-right: solid 1px red;
   height: 42px;
   position: absolute;
   margin-top: -9px;
 }
-/* line 158, ../scss/partial/_general.scss */
+/* line 157, ../scss/partial/_general.scss */
+.project-wrapper .project-summary .paid-content-title {
+  margin-top: 1em;
+}
+/* line 162, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item {
   margin-bottom: 1em;
   border: solid 1px #efefef;
 }
-/* line 162, ../scss/partial/_general.scss */
+/* line 166, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item img {
   width: 24px;
   display: inline-block;
@@ -179,7 +183,7 @@ hr {
   border-radius: 50%;
   border: solid 1px white;
 }
-/* line 171, ../scss/partial/_general.scss */
+/* line 175, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-header {
   background-color: #F9F9F9;
   font-size: 12px;
@@ -187,20 +191,20 @@ hr {
   font-weight: bold;
   padding: 0.5em;
 }
-/* line 178, ../scss/partial/_general.scss */
+/* line 182, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-header .conversion {
   float: right;
   padding-right: 1em;
   line-height: 27px;
   color: green;
 }
-/* line 185, ../scss/partial/_general.scss */
+/* line 189, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-header .item-type {
   float: right;
   font-size: 14px;
   color: #B5B5B5;
 }
-/* line 192, ../scss/partial/_general.scss */
+/* line 196, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-body {
   padding: 0.75em;
 }

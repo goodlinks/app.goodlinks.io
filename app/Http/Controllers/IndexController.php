@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helper\TwigHelper;
+use App\Model\Article;
 use App\Model\HistoryItem;
 use App\Model\Importer;
 
@@ -13,6 +14,10 @@ use DB;
 
 class IndexController extends Controller
 {
+    /**
+     * @param $projectData
+     * @return Carbon
+     */
     protected function _getFromDate($projectData)
     {
         $toDate = $this->_getToDate($projectData);
@@ -28,6 +33,11 @@ class IndexController extends Controller
      */
     protected function _getToDate($projectData)
     {
+        if (isset($_GET['to'])) {
+            $toDate = new Carbon($_GET['to']);
+            return $toDate;
+        }
+
         $billingStartDate = new Carbon($projectData['billing_start_date']);
         $today = new Carbon();
         $toDate = $billingStartDate->copy();
@@ -86,6 +96,8 @@ class IndexController extends Controller
             $projectData['to_date'] = $this->_getToDate($projectData);
             $projectData['months'] = $this->_getMonthCount($projectData);
             $projectData['monthly_conversion_count'] = $projectData['monthly_conversion_count'] * $projectData['months'];
+
+            $projectData['paid_content'] = $this->_getPaidContentData($projectData);
         }
 
         $twig = TwigHelper::twig();
@@ -99,6 +111,46 @@ class IndexController extends Controller
             "projects"                  => $projects,
             "is_admin"                  => $isAdmin,
         ));
+    }
+
+    protected function _getPaidContentData($projectData)
+    {
+        if (! isset($projectData['monthly_word_count'])) {
+            return array();
+        }
+
+        $fromDate = $this->_getFromDate($projectData);
+        $toDate = $this->_getToDate($projectData);
+
+        $articles = Article::where('billed_at', '>=', $fromDate->format('Y-m-d'))
+            ->where('billed_at', '<=', $toDate->format('Y-m-d'))
+            ->where('buzzstream_project_id', '=', $projectData['buzzstream_project_id'])
+            ->get();
+
+        $monthlyWordCount = $projectData['monthly_word_count'];
+        $wordCount = $articleCount = 0;
+        foreach ($articles as $article) {
+            /** @var Article $article */
+            $wordCount += $article->getWordCount();
+            $articleCount++;
+        }
+
+        $completionPercentage = ($wordCount / $monthlyWordCount) * 100;
+        $completionPercentage = ($completionPercentage > 100) ? 100 : $completionPercentage;
+        $percentBillingPeriodComplete = $projectData['billing_period_completion_percentage'];
+
+        $diff = $completionPercentage - $percentBillingPeriodComplete;
+        $status = $completionPercentage >= $percentBillingPeriodComplete ? "ahead-schedule" : "behind-schedule";
+        $severity = abs($diff) > 10 ? "lot" : "little";
+
+        return array(
+            'status'                        => $status,
+            'severity'                      => $severity,
+            'word_count'                    => $wordCount,
+            'article_count'                 => $articleCount,
+            'completion_percentage'         => $completionPercentage,
+            'articles'                      => $articles,
+        );
     }
 
     public function team()
@@ -141,12 +193,14 @@ class IndexController extends Controller
             $today = new Carbon();
             $daysIntoBillingPeriod = $today->diffInDays($fromDate);
             $percentBillingPeriodComplete = ($daysIntoBillingPeriod / 30) * 100;
+            $percentBillingPeriodComplete = ($percentBillingPeriodComplete > 100) ? 100 : $percentBillingPeriodComplete;
+
             $percentPitchProgress = ($pitchCount / $monthlyPitchCount) * 100;
             $percentPitchProgress = ($percentPitchProgress > 100) ? 100 : $percentPitchProgress;
 
             $diff = $percentPitchProgress - $percentBillingPeriodComplete;
             $status = $percentPitchProgress >= $percentBillingPeriodComplete ? "ahead-schedule" : "behind-schedule";
-            $severity = abs($diff) >= 7 ? "lot" : "little";
+            $severity = abs($diff) > 10 ? "lot" : "little";
 
             $websiteCount = $this->_getWebsiteCountByUser($buzzstreamUser, $fromDate, $toDate);
             $introductionCount = $this->_getIntroductionCountByUser($buzzstreamUser, $fromDate, $toDate);
@@ -314,12 +368,14 @@ class IndexController extends Controller
         $today = new Carbon();
         $daysIntoBillingPeriod = $today->diffInDays($fromDate);
         $percentBillingPeriodComplete = ($daysIntoBillingPeriod / (30 * $months)) * 100;
+        $percentBillingPeriodComplete = ($percentBillingPeriodComplete > 100) ? 100 : $percentBillingPeriodComplete;
+
         $percentConversionProgress = ($conversionCount / $monthlyConversionCount) * 100;
         $percentConversionProgress = ($percentConversionProgress > 100) ? 100 : $percentConversionProgress;
 
         $diff = $percentConversionProgress - $percentBillingPeriodComplete;
         $status = $percentConversionProgress >= $percentBillingPeriodComplete ? "ahead-schedule" : "behind-schedule";
-        $severity = abs($diff) >= 7 ? "lot" : "little";
+        $severity = abs($diff) > 10 ? "lot" : "little";
 
         return array(
             'project_status'                        => $status,
@@ -465,6 +521,7 @@ class IndexController extends Controller
             + $this->_getReferralCount($projectData);
 
         $data = $this->_getProjectStatusData($projectData);
+        $projectData['billing_period_completion_percentage'] = $data['billing_period_completion_percentage'];
 
         return $twig->render('project.html.twig', array(
             "title"                             => "BuzzStream Feed",
@@ -480,12 +537,13 @@ class IndexController extends Controller
             "conversion_count"                  => $projectData['conversion_count'],
             "progress_status"                   => $data['project_status'],
             "progress_severity"                 => $data['progress_severity'],
-            "conversion_completion_percentage"   => $data['conversion_completion_percentage'],
-            "month_completion_percentage"       => $data['billing_period_completion_percentage'],
+            "conversion_completion_percentage"  => $data['conversion_completion_percentage'],
+            "billing_period_completion_percentage"       => $data['billing_period_completion_percentage'],
             "from_date"                         => $fromDate,
             "to_date"                           => $toDate,
             "monthly_conversion_count"          => $monthlyConversionCount,
             "billing_start_date"                => new Carbon($projectData['billing_start_date']),
+            "paid_content"                      => $this->_getPaidContentData($projectData),
         ));
     }
 

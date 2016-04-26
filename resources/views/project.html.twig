@@ -5,12 +5,15 @@
     {% block head %}
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="/css/external/tooltipster.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
         {# If these are async the button wave didn't work right at one point.  Seems to
            be working now though. #}
         <script src="/js/external/jquery.min.js"></script>
         <link rel="shortcut icon" type="image/png" href="https://media.simplecast.com/podcast/favicon_image/1623/x16_1453500952-favicon.png" />
+
+        <script src="/js/external/jquery.tooltipster.js"></script>
 
         <title>{{ project_data.name }} | Goodlinks BuzzStream Feed</title>
     {% endblock %}
@@ -84,8 +87,24 @@
                         {{ conversion_count }} out of {{ monthly_conversion_count }} conversions
                     </div>
 
-                    <div class="day-of-month-indicator" style="left: {{ month_completion_percentage }}%"></div>
+                    <div class="day-of-month-indicator" style="left: {{ billing_period_completion_percentage }}%"></div>
                 </div>
+
+                {% if paid_content %}
+                    <div class="paid-content-title">
+                        <i class="fa fa-pencil"></i>
+                            <span class="tooltip conversion-count" title="{% for item in paid_content.articles %}{{ item.getDescription() }}{{ loop.last ? "" : ", " }}{% endfor %}">
+                                {{ paid_content.article_count }} {{ paid_content.article_count == 1 ? "article" : "articles" }}
+                            </span>
+                    </div>
+                    <div class="paid-content-progress">
+                        <div class="fill {{ paid_content.status }} {{ paid_content.severity }}" style="width: {{ paid_content.completion_percentage == 0 ? "100" : paid_content.completion_percentage }}%"></div>
+                        <div class="progress-label">
+                            {{ paid_content.word_count }} out of {{ project_data.monthly_word_count }} words
+                        </div>
+                        <div class="day-of-month-indicator" style="left: {{ billing_period_completion_percentage }}%"></div>
+                    </div>
+                {% endif %}
             </div>
             <div class="feed">
                 {% for item in history %}
@@ -124,5 +143,10 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.tooltip').tooltipster();
+        });
+    </script>
 </body>
 </html>
