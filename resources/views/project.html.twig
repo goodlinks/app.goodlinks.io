@@ -69,16 +69,28 @@
                 </div>
                 <div class="conversion-details">
                     {% if introduction_count %}
-                        <i class="fa fa-comments"></i> <span style="padding-right: 10px;">{{ introduction_count }} {{ introduction_count == 1 ? "introduction" : "introductions" }}</span>
+                        <i class="fa fa-comments"></i>
+                        <span class="tooltip conversion-count" title="{% for item in introduction_items %}{{ item.getWebsiteNames() }}{{ loop.last ? "" : ", " }}{% endfor %}">
+                            {{ introduction_count }} {{ introduction_count == 1 ? "introduction" : "introductions" }}
+                        </span>
                     {% endif %}
                     {% if referral_count %}
-                        <i class="fa fa-money"></i> <span style="padding-right: 10px;">{{ referral_count }} {{ referral_count == 1 ? "referral" : "referrals" }}</span>
+                        <i class="fa fa-money"></i>
+                        <span class="tooltip conversion-count" title="{% for item in referral_items %}{{ item.getWebsiteNames() }}{{ loop.last ? "" : ", " }}{% endfor %}">
+                            {{ referral_count }} {{ referral_count == 1 ? "referral" : "referrals" }}
+                        </span>
                     {% endif %}
                     {% if link_agreed_count %}
-                        <i class="fa fa-link"></i> <span style="padding-right: 10px;">{{ link_agreed_count }} {{ link_agreed_count == 1 ? "planned links" : "planned links" }}</span>
+                        <i class="fa fa-link"></i>
+                        <span class="tooltip conversion-count" title="{% for item in link_agreed_items %}{{ item.getWebsiteNames() }}{{ loop.last ? "" : ", " }}{% endfor %}">
+                                {{ link_agreed_count }} {{ link_agreed_count == 1 ? "planned links" : "planned links" }}
+                            </span>
                     {% endif %}
                     {% if placement_count %}
-                        <i class="fa fa-link"></i> <span style="padding-right: 10px;">{{ placement_count }} {{ placement_count == 1 ? "placement" : "placements" }}</span>
+                        <i class="fa fa-link"></i>
+                        <span class="tooltip conversion-count" title="{% for item in placement_items %}{{ item.getWebsiteNames() }}{{ loop.last ? "" : ", " }}{% endfor %}">
+                                {{ placement_count }} {{ placement_count == 1 ? "placement" : "placements" }}
+                            </span>
                     {% endif %}
                 </div>
                 <div class="pitch-progress">

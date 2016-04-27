@@ -513,6 +513,10 @@ class IndexController extends Controller
         $linkAgreedCount = $this->_getLinkAgreedCount($projectData);
         $monthlyConversionCount = $projectData['monthly_conversion_count'];
 
+        $projectData['referral_items'] = $this->_getReferralItems($projectData);
+        $projectData['placement_items'] = $this->_getPlacementItems($projectData);
+        $projectData['link_agreed_items'] = $this->_getLinkAgreedItems($projectData);
+
         $twig = TwigHelper::twig();
 
         $projectData['pitch_count'] = $this->_getPitchCount($projectData);
@@ -535,6 +539,10 @@ class IndexController extends Controller
             "referral_count"                    => $this->_getReferralCount($projectData),
             "pitch_count"                       => $projectData['pitch_count'],
             "conversion_count"                  => $projectData['conversion_count'],
+            'introduction_items'                =>  $this->_getIntroductionItems($projectData),
+            'referral_items'                    =>  $this->_getReferralItems($projectData),
+            'placement_items'                   =>  $this->_getPlacementItems($projectData),
+            'link_agreed_items'                 =>  $this->_getLinkAgreedItems($projectData),
             "progress_status"                   => $data['project_status'],
             "progress_severity"                 => $data['progress_severity'],
             "conversion_completion_percentage"  => $data['conversion_completion_percentage'],
