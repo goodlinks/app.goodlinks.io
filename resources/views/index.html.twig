@@ -67,25 +67,25 @@
                     <div class="conversion-details">
                         {% if project.introduction_count %}
                             <i class="fa fa-comments"></i>
-                            <span class="tooltip conversion-count" title="{% for item in project.introduction_items %}{{ item.getWebsiteNames() }}{{ loop.last ? "" : ", " }}{% endfor %}">
+                            <span class="{{ is_admin ? "tooltip" : "" }} conversion-count" title="{% for item in project.introduction_items %}{{ is_admin ? item.getWebsiteNames() : "" }}{{ loop.last ? "" : ", " }}{% endfor %}">
                                 {{ project.introduction_count }} {{ project.introduction_count == 1 ? "introduction" : "introductions" }}
                             </span>
                         {% endif %}
                         {% if project.referral_count %}
                             <i class="fa fa-money"></i>
-                            <span class="tooltip conversion-count" title="{% for item in project.referral_items %}{{ item.getWebsiteNames() }}{{ loop.last ? "" : ", " }}{% endfor %}">
+                            <span class="{{ is_admin ? "tooltip" : "" }} conversion-count" title="{% for item in project.referral_items %}{{ is_admin ? item.getWebsiteNames() : "" }}{{ loop.last ? "" : ", " }}{% endfor %}">
                                 {{ project.referral_count }} {{ project.referral_count == 1 ? "referral" : "referrals" }}
                             </span>
                         {% endif %}
                         {% if project.link_agreed_count %}
                             <i class="fa fa-link"></i>
-                            <span class="tooltip conversion-count" title="{% for item in project.link_agreed_items %}{{ item.getWebsiteNames() }}{{ loop.last ? "" : ", " }}{% endfor %}">
+                            <span class="{{ is_admin ? "tooltip" : "" }} conversion-count" title="{% for item in project.link_agreed_items %}{{ is_admin ? item.getWebsiteNames() : "" }}{{ loop.last ? "" : ", " }}{% endfor %}">
                                 {{ project.link_agreed_count }} {{ project.link_agreed_count == 1 ? "planned links" : "planned links" }}
                             </span>
                         {% endif %}
                         {% if project.placement_count %}
                             <i class="fa fa-link"></i>
-                            <span class="tooltip conversion-count" title="{% for item in project.placement_items %}{{ item.getWebsiteNames() }}{{ loop.last ? "" : ", " }}{% endfor %}">
+                            <span class="{{ is_admin ? "tooltip" : "" }} conversion-count" title="{% for item in project.placement_items %}{{ is_admin ? item.getWebsiteNames() : "" }}{{ loop.last ? "" : ", " }}{% endfor %}">
                                 {{ project.placement_count }} {{ project.placement_count == 1 ? "placement" : "placements" }}
                             </span>
                         {% endif %}
@@ -100,7 +100,7 @@
                     {% if project.paid_content %}
                         <div class="paid-content-title">
                             <i class="fa fa-pencil"></i>
-                            <span class="tooltip conversion-count" title="{% for item in project.paid_content.articles %}{{ item.getDescription() }}{{ loop.last ? "" : ", " }}{% endfor %}">
+                            <span class="{{ is_admin ? "tooltip" : "" }} conversion-count" title="{% for item in project.paid_content.articles %}{{ is_admin ? item.getDescription() : "" }}{{ loop.last ? "" : ", " }}{% endfor %}">
                                 {{ project.paid_content.article_count }} {{ project.paid_content.article_count == 1 ? "article" : "articles" }}
                             </span>
                         </div>
