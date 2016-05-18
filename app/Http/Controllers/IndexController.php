@@ -73,7 +73,7 @@ class IndexController extends Controller
         }
 
         foreach ($projects as & $projectData) {
-            $projectData['pitch_count'] = $this->_getPitchCount($projectData);
+            $projectData['email_count'] = $this->_getEmailCount($projectData);
             $projectData['website_count'] = $this->_getWebsiteCount($projectData);
             $projectData['introduction_count'] = $this->_getIntroductionCount($projectData);
             $projectData['referral_count'] = $this->_getReferralCount($projectData);
@@ -188,7 +188,9 @@ class IndexController extends Controller
             $buzzstreamUser = new User();
             $buzzstreamUser->load($buzzstreamUserUrl);
 
-            $pitchCount = $this->_getPitchCountByUser($buzzstreamUser, $fromDate, $toDate);
+            // Can replace this with email count $pitchCount = $this->_getEmailCountByUser($buzzstreamUser, $fromDate, $toDate);
+            $pitchCount = 0;
+            $emailCount = 0;
 
             $today = new Carbon();
             $daysIntoBillingPeriod = $today->diffInDays($fromDate);
@@ -218,7 +220,7 @@ class IndexController extends Controller
                 'billing_period_completion_percentage'  => $percentBillingPeriodComplete,
                 'progress_status'                       => $status,
                 'progress_severity'                     => $severity,
-                'pitch_count'                           => $pitchCount,
+                'email_count'                           => $emailCount,
                 'website_count'                         => $websiteCount,
                 'introduction_count'                    => $introductionCount,
                 'referral_count'                        => $referralCount,
@@ -289,9 +291,27 @@ class IndexController extends Controller
         return $collection;
     }
 
-    protected function _getPitchCount($projectData)
+    protected function _getEmailCount($projectData)
     {
-        return $this->_getRelationshipStageCount($projectData, 'Pitched');
+        $fromDate = $this->_getFromDate($projectData);
+        $toDate = $this->_getToDate($projectData);
+
+        $count = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
+            ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
+            ->where('type', '=', 'EMail')
+            ->where('is_ignored', '=', 0)
+            ->leftJoin('history_item_websites', function($join) {
+                /** @var $join \Illuminate\Database\Query\JoinClause */
+                $join->on('history_item_websites.history_item_id', '=', 'history_items.id');
+            })
+            ->leftJoin('history_item_projects', function($join) {
+                /** @var $join \Illuminate\Database\Query\JoinClause */
+                $join->on('history_item_projects.history_item_id', '=', 'history_items.id');
+            })
+            ->where('history_item_projects.buzzstream_project_id', '=', $projectData['buzzstream_project_id'])
+            ->count();
+
+        return $count;
     }
 
     protected function _getIntroductionCount($projectData)
@@ -519,7 +539,7 @@ class IndexController extends Controller
 
         $twig = TwigHelper::twig();
 
-        $projectData['pitch_count'] = $this->_getPitchCount($projectData);
+        $projectData['email_count'] = $this->_getEmailCount($projectData);
         $projectData['conversion_count'] = $this->_getLinkAgreedCount($projectData)
             + $this->_getPlacementCount($projectData) + $this->_getIntroductionCount($projectData)
             + $this->_getReferralCount($projectData);
@@ -537,7 +557,7 @@ class IndexController extends Controller
             "link_agreed_count"                 => $linkAgreedCount,
             "introduction_count"                => $this->_getIntroductionCount($projectData),
             "referral_count"                    => $this->_getReferralCount($projectData),
-            "pitch_count"                       => $projectData['pitch_count'],
+            "email_count"                       => $projectData['email_count'],
             "conversion_count"                  => $projectData['conversion_count'],
             'introduction_items'                =>  $this->_getIntroductionItems($projectData),
             'referral_items'                    =>  $this->_getReferralItems($projectData),
