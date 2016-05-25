@@ -103,6 +103,7 @@ hr {
             img {
                 border-radius: 50%;
                 width: 100%;
+                -webkit-filter: grayscale(100%);
             }
         }
 
