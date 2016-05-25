@@ -55,7 +55,10 @@
             <div class="project-wrapper">
                 <div class="project-summary">
                     <div class="project-thumbnail"><img src="{{ project.image }}"></div>
-                    <div class="project-name">{{ project.name }} </div>
+                    <div class="goodlinker-thumbnail">
+                        <img src="{{ project.goodlinker_image }}">
+                    </div>
+                    <div class="project-name">{{ project.name }}</div>
                     <div class="date-range">
                         {{ project.from_date.format("M j") }} thru {{ project.to_date.format("M j") }} ({{ project.months }} {{ project.months == 1 ? "month" : "months"}})
                     </div>

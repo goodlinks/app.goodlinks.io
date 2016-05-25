@@ -102,25 +102,37 @@ hr {
   width: 55px;
 }
 /* line 97, ../scss/partial/_general.scss */
+.project-wrapper .project-summary .goodlinker-thumbnail {
+  width: 46px;
+  float: right;
+  margin-right: 15px;
+  padding-top: 4px;
+}
+/* line 103, ../scss/partial/_general.scss */
+.project-wrapper .project-summary .goodlinker-thumbnail img {
+  border-radius: 50%;
+  width: 100%;
+}
+/* line 109, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .project-name {
   font-size: 20px;
   line-height: 31px;
   font-weight: bold;
 }
-/* line 103, ../scss/partial/_general.scss */
+/* line 115, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .conversion-rate {
   color: green;
 }
-/* line 107, ../scss/partial/_general.scss */
+/* line 119, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .conversion-details {
   font-size: 12px;
 }
-/* line 109, ../scss/partial/_general.scss */
+/* line 121, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .conversion-details .conversion-count {
   padding-right: 10px;
   cursor: help;
 }
-/* line 115, ../scss/partial/_general.scss */
+/* line 127, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress, .project-wrapper .project-summary .paid-content-progress {
   margin-top: 15px;
   border: solid 1px #efefef;
@@ -128,7 +140,7 @@ hr {
   position: relative;
   height: 25px;
 }
-/* line 122, ../scss/partial/_general.scss */
+/* line 134, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .fill, .project-wrapper .project-summary .paid-content-progress .fill {
   position: absolute;
   width: 20%;
@@ -137,44 +149,44 @@ hr {
   margin-left: -8px;
   background-color: #efefef;
 }
-/* line 130, ../scss/partial/_general.scss */
+/* line 142, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .fill.ahead-schedule, .project-wrapper .project-summary .paid-content-progress .fill.ahead-schedule {
   background-color: #E4FFE4;
 }
-/* line 133, ../scss/partial/_general.scss */
+/* line 145, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .fill.ahead-schedule.little, .project-wrapper .project-summary .paid-content-progress .fill.ahead-schedule.little {
   background-color: #E4FFE4;
 }
-/* line 136, ../scss/partial/_general.scss */
+/* line 148, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .fill.behind-schedule, .project-wrapper .project-summary .paid-content-progress .fill.behind-schedule {
   background-color: #FFE7E7;
 }
-/* line 139, ../scss/partial/_general.scss */
+/* line 151, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .fill.behind-schedule.little, .project-wrapper .project-summary .paid-content-progress .fill.behind-schedule.little {
   background-color: #FFF3DC;
 }
-/* line 144, ../scss/partial/_general.scss */
+/* line 156, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .progress-label, .project-wrapper .project-summary .paid-content-progress .progress-label {
   z-index: 9;
   position: absolute;
 }
-/* line 149, ../scss/partial/_general.scss */
+/* line 161, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .day-of-month-indicator, .project-wrapper .project-summary .paid-content-progress .day-of-month-indicator {
   border-right: solid 1px red;
   height: 42px;
   position: absolute;
   margin-top: -9px;
 }
-/* line 157, ../scss/partial/_general.scss */
+/* line 169, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .paid-content-title {
   margin-top: 1em;
 }
-/* line 162, ../scss/partial/_general.scss */
+/* line 174, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item {
   margin-bottom: 1em;
   border: solid 1px #efefef;
 }
-/* line 166, ../scss/partial/_general.scss */
+/* line 178, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item img {
   width: 24px;
   display: inline-block;
@@ -183,7 +195,7 @@ hr {
   border-radius: 50%;
   border: solid 1px white;
 }
-/* line 175, ../scss/partial/_general.scss */
+/* line 187, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-header {
   background-color: #F9F9F9;
   font-size: 12px;
@@ -191,20 +203,20 @@ hr {
   font-weight: bold;
   padding: 0.5em;
 }
-/* line 182, ../scss/partial/_general.scss */
+/* line 194, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-header .conversion {
   float: right;
   padding-right: 1em;
   line-height: 27px;
   color: green;
 }
-/* line 189, ../scss/partial/_general.scss */
+/* line 201, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-header .item-type {
   float: right;
   font-size: 14px;
   color: #B5B5B5;
 }
-/* line 196, ../scss/partial/_general.scss */
+/* line 208, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-body {
   padding: 0.75em;
 }

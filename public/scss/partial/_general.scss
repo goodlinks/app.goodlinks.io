@@ -94,6 +94,18 @@ hr {
             }
         }
 
+        .goodlinker-thumbnail {
+            width: 46px;
+            float: right;
+            margin-right: 15px;
+            padding-top: 4px;
+
+            img {
+                border-radius: 50%;
+                width: 100%;
+            }
+        }
+
         .project-name {
             font-size: 20px;
             line-height: 31px;
