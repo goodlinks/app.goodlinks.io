@@ -221,10 +221,10 @@ hr {
             .email-contents {
                 font-size: 11px;
                 line-height: 14px;
-                overflow-x: hidden;
-                overflow-y: scroll;
+                overflow: scroll;
                 max-height: 180px;
                 margin-right: -1em;
+                margin-bottom: -1em;
             }
         }
     }

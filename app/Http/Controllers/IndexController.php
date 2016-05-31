@@ -314,6 +314,29 @@ class IndexController extends Controller
         return $count;
     }
 
+    protected function _getTweetCount($projectData)
+    {
+        $fromDate = $this->_getFromDate($projectData);
+        $toDate = $this->_getToDate($projectData);
+
+        $count = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
+            ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
+            ->where('type', '=', 'Tweet')
+            ->where('is_ignored', '=', 0)
+            ->leftJoin('history_item_websites', function($join) {
+                /** @var $join \Illuminate\Database\Query\JoinClause */
+                $join->on('history_item_websites.history_item_id', '=', 'history_items.id');
+            })
+            ->leftJoin('history_item_projects', function($join) {
+                /** @var $join \Illuminate\Database\Query\JoinClause */
+                $join->on('history_item_projects.history_item_id', '=', 'history_items.id');
+            })
+            ->where('history_item_projects.buzzstream_project_id', '=', $projectData['buzzstream_project_id'])
+            ->count();
+
+        return $count;
+    }
+
     protected function _getIntroductionCount($projectData)
     {
         return $this->_getRelationshipStageCount($projectData, 'Introduced');
@@ -564,6 +587,7 @@ class IndexController extends Controller
             "introduction_count"                => $this->_getIntroductionCount($projectData),
             "referral_count"                    => $this->_getReferralCount($projectData),
             "email_count"                       => $projectData['email_count'],
+            "tweet_count"                       => $this->_getTweetCount($projectData),
             "conversion_count"                  => $projectData['conversion_count'],
             'introduction_items'                =>  $this->_getIntroductionItems($projectData),
             'referral_items'                    =>  $this->_getReferralItems($projectData),
