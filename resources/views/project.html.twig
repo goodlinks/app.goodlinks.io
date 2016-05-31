@@ -150,6 +150,11 @@
                                     {{ item.getSummary() }}
                                 {% endif %}
                             </div>
+                            {% if item.getType() == 'EMail' %}
+                                <div class="email-contents">
+                                    <pre>{{ item.getBody() }}</pre>
+                                </div>
+                            {% endif %}
                             <div class="item-url" style="display: none;">{{ item.getBuzzstreamApiUrl() }}</div>
                         </div>
                     </div>

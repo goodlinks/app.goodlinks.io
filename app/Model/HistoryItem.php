@@ -50,6 +50,11 @@ class HistoryItem extends Model
         return $this->summary;
     }
 
+    public function getBody()
+    {
+        return $this->body;
+    }
+
     public function getType()
     {
         return $this->type;

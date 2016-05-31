@@ -217,6 +217,15 @@ hr {
 
         .item-body {
             padding: 0.75em;
+            
+            .email-contents {
+                font-size: 11px;
+                line-height: 14px;
+                overflow-x: hidden;
+                overflow-y: scroll;
+                max-height: 180px;
+                margin-right: -1em;
+            }
         }
     }
 }
