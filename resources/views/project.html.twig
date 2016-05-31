@@ -128,6 +128,8 @@
                                 - {{ item.getWebsiteNames() }}
                             {% endif %}
                             <span class="item-type">
+                                <i class="fa fa-ban"></i>
+
                                 {% if item.getType() == 'Tweet' %}
                                     <i class="fa fa-twitter"></i>
                                 {% elseif item.getType() == 'Note' %}
@@ -135,9 +137,6 @@
                                 {% elseif item.getType() == 'EMail' %}
                                     <i class="fa fa-envelope"></i>
                                 {% elseif item.getType() == 'Stage' %}
-                                    {% if item.isConversion() %}
-                                        <i class="fa fa-ban"></i>
-                                    {% endif %}
                                     <i class="fa fa-arrow-right"></i>
                                 {% endif %}
                             </span>
@@ -168,8 +167,7 @@
                     url: '/history-item/' + buzzstreamId + '/ignore',
                     method: "GET",
                     success: function(data) {
-                        $banElement.hide();
-                        alert("Ignored " + data.buzzstream_id);
+                        $banElement.closest('.feed-item').addClass('ignored');
                     }
                 });
             })

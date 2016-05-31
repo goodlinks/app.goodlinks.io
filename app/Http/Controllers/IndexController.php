@@ -525,8 +525,14 @@ class IndexController extends Controller
             ->whereNotIn('history_item_websites.buzzstream_website_id', $excludedWebsiteIds)
             ->where('history_item_projects.buzzstream_project_id', '=', $projectData['buzzstream_project_id'])
             ->orderBy('buzzstream_created_at', 'desc')
-            ->limit(2000)
-            ->get();
+            ->limit(2000);
+
+        if (isset($_GET['type'])) {
+            $type = $_GET['type'];
+            $historyItems->where('history_items.type', '=', $type);
+        }
+
+        $historyItems = $historyItems->get();
 
         $websiteCount = $this->_getWebsiteCount($projectData);
         $placementCount = $this->_getPlacementCount($projectData);

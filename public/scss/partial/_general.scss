@@ -176,6 +176,10 @@ hr {
         margin-bottom: 1em;
         border: solid 1px #efefef;
 
+        &.ignored {
+            opacity: 0.5;
+        }
+
         img {
             width: 24px;
             display: inline-block;
