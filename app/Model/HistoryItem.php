@@ -55,6 +55,12 @@ class HistoryItem extends Model
         return $this->type;
     }
 
+    public function setIsIgnored($value)
+    {
+        $this->is_ignored = $value;
+        return $this;
+    }
+
     public function getBuzzstreamApiUrl()
     {
         return "https://api.buzzstream.com/v1/history/" . $this->getBuzzstreamId();

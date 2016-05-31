@@ -120,7 +120,7 @@
             </div>
             <div class="feed">
                 {% for item in history %}
-                    <div class="feed-item">
+                    <div class="feed-item" data-buzzstream-id="{{ item.getBuzzstreamId() }}">
                         <div class="item-header">
                             <img src="{{ item.getAvatarUrl() }}">
                             {{ item.getBuzzstreamCreatedAtDate().format("M j, Y") }}
@@ -135,6 +135,9 @@
                                 {% elseif item.getType() == 'EMail' %}
                                     <i class="fa fa-envelope"></i>
                                 {% elseif item.getType() == 'Stage' %}
+                                    {% if item.isConversion() %}
+                                        <i class="fa fa-ban"></i>
+                                    {% endif %}
                                     <i class="fa fa-arrow-right"></i>
                                 {% endif %}
                             </span>
@@ -158,6 +161,18 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('.tooltip').tooltipster();
+            $('.feed-item .fa-ban').click(function() {
+                var $banElement = $(this);
+                var buzzstreamId = $banElement.closest('.feed-item').attr('data-buzzstream-id');
+                $.ajax({
+                    url: '/history-item/' + buzzstreamId + '/ignore',
+                    method: "GET",
+                    success: function(data) {
+                        $banElement.hide();
+                        alert("Ignored " + data.buzzstream_id);
+                    }
+                });
+            })
         });
     </script>
 </body>

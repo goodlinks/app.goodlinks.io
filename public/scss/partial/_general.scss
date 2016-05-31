@@ -203,6 +203,11 @@ hr {
                 float: right;
                 font-size: 14px;
                 color: #B5B5B5;
+
+                .fa-ban {
+                    padding-right: 6px;
+                    cursor: pointer;
+                }
             }
         }
 

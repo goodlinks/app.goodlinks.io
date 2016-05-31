@@ -640,4 +640,15 @@ class IndexController extends Controller
 
         return $thisProjectData;
     }
+
+    public function ignoreHistoryItem($buzzstreamId)
+    {
+        $historyItem = HistoryItem::findByBuzzstreamId($buzzstreamId);
+        $historyItem->setIsIgnored(true)->save();
+
+        return array(
+            'success'       => true,
+            'buzzstream_id' => $buzzstreamId,
+        );
+    }
 }
