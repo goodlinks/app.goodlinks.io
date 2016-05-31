@@ -528,12 +528,6 @@ class IndexController extends Controller
         $fromDate = $this->_getFromDate($projectData);
         $toDate = $this->_getToDate($projectData);
 
-        $excludedWebsiteIds = array(
-            56013240,
-            55896282,
-            55438015, // Buzzstream
-        );
-
         $historyItems = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
             ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
             ->where('is_ignored', '=', 0)
@@ -545,7 +539,6 @@ class IndexController extends Controller
                 /** @var $join \Illuminate\Database\Query\JoinClause */
                 $join->on('history_item_websites.history_item_id', '=', 'history_items.id');
             })
-            ->whereNotIn('history_item_websites.buzzstream_website_id', $excludedWebsiteIds)
             ->where('history_item_projects.buzzstream_project_id', '=', $projectData['buzzstream_project_id'])
             ->orderBy('buzzstream_created_at', 'desc')
             ->limit(2000);

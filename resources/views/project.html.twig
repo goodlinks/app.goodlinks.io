@@ -61,8 +61,6 @@
                 <div class="project-thumbnail"><img src="{{ project_data.image }}"></div>
                 <div class="project-name">{{ project_data.name }}</div>
                 <div class="project-stats">
-                    <i class="fa fa-eye"></i> {{ history|length }} events
-
                     <i class="fa fa-user padding-left"></i> {{ website_count }} websites
                     <i class="fa fa-paper-plane-o padding-left"></i> {{ email_count }} {{ email_count == 1 ? "email" : "emails" }}
                     <i class="fa fa-twitter padding-left"></i> {{ tweet_count }} {{ tweet_count == 1 ? "tweet" : "tweets" }}
