@@ -75,7 +75,8 @@ class IndexController extends Controller
         foreach ($projects as & $projectData) {
             $projectData['email_count'] = $this->_getEmailCount($projectData);
             $projectData['tweet_count'] = $this->_getTweetCount($projectData);
-            $projectData['communication_count'] = $projectData['email_count'] + $projectData['tweet_count'];
+            $projectData['comment_count'] = $this->_getCommentCount($projectData);
+            $projectData['communication_count'] = $projectData['email_count'] + $projectData['tweet_count'] + $projectData['comment_count'];
 
             $projectData['website_count'] = $this->_getWebsiteCount($projectData);
             $projectData['introduction_count'] = $this->_getIntroductionCount($projectData);
@@ -106,7 +107,7 @@ class IndexController extends Controller
         $twig = TwigHelper::twig();
 
         $adminIPs = array_map('trim', explode(',', env('ADMIN_IPS')));
-        $isAdmin = isset($_SERVER['REMOTE_ADDR']) ? (in_array($_SERVER['REMOTE_ADDR'], $adminIPs)) : false;
+        $isAdmin = isset($_GET['REMOTE_ADDR']) ? (in_array($_SERVER['REMOTE_ADDR'], $adminIPs)) : false;
 
         return $twig->render('index.html.twig', array(
             "title"                     => "Projects",
@@ -340,6 +341,29 @@ class IndexController extends Controller
         return $count;
     }
 
+    protected function _getCommentCount($projectData)
+    {
+        $fromDate = $this->_getFromDate($projectData);
+        $toDate = $this->_getToDate($projectData);
+
+        $count = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
+            ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
+            ->where('type', '=', 'Blog Comment')
+            ->where('is_ignored', '=', 0)
+            ->leftJoin('history_item_websites', function($join) {
+                /** @var $join \Illuminate\Database\Query\JoinClause */
+                $join->on('history_item_websites.history_item_id', '=', 'history_items.id');
+            })
+            ->leftJoin('history_item_projects', function($join) {
+                /** @var $join \Illuminate\Database\Query\JoinClause */
+                $join->on('history_item_projects.history_item_id', '=', 'history_items.id');
+            })
+            ->where('history_item_projects.buzzstream_project_id', '=', $projectData['buzzstream_project_id'])
+            ->count();
+
+        return $count;
+    }
+
     protected function _getIntroductionCount($projectData)
     {
         return $this->_getRelationshipStageCount($projectData, 'Introduced');
@@ -408,7 +432,7 @@ class IndexController extends Controller
     {
         $months = $this->_getMonthCount($projectData);
         $fromDate = $this->_getFromDate($projectData);
-        $communicationCount = $projectData['email_count'] + $projectData['tweet_count'];
+        $communicationCount = $projectData['email_count'] + $projectData['tweet_count'] + $projectData['comment_count'];
         $monthlyCommunicationCount = $projectData['monthly_communication_count'] * $months;
 
         $today = new Carbon();
@@ -566,7 +590,8 @@ class IndexController extends Controller
 
         $projectData['email_count'] = $this->_getEmailCount($projectData);
         $projectData['tweet_count'] = $this->_getTweetCount($projectData);
-        $projectData['communication_count'] = $projectData['email_count'] + $projectData['tweet_count'];
+        $projectData['comment_count'] = $this->_getCommentCount($projectData);
+        $projectData['communication_count'] = $projectData['email_count'] + $projectData['tweet_count'] + $projectData['comment_count'];
 
         $projectData['conversion_count'] = $this->_getLinkAgreedCount($projectData)
             + $this->_getPlacementCount($projectData) + $this->_getIntroductionCount($projectData)
@@ -587,12 +612,13 @@ class IndexController extends Controller
             "referral_count"                    => $this->_getReferralCount($projectData),
             "email_count"                       => $projectData['email_count'],
             "tweet_count"                       => $projectData['tweet_count'],
+            "comment_count"                     => $projectData['comment_count'],
             "communication_count"               => $projectData['communication_count'],
             "conversion_count"                  => $projectData['conversion_count'],
-            'introduction_items'                =>  $this->_getIntroductionItems($projectData),
-            'referral_items'                    =>  $this->_getReferralItems($projectData),
-            'placement_items'                   =>  $this->_getPlacementItems($projectData),
-            'link_agreed_items'                 =>  $this->_getLinkAgreedItems($projectData),
+            'introduction_items'                => $this->_getIntroductionItems($projectData),
+            'referral_items'                    => $this->_getReferralItems($projectData),
+            'placement_items'                   => $this->_getPlacementItems($projectData),
+            'link_agreed_items'                 => $this->_getLinkAgreedItems($projectData),
             "progress_status"                   => $data['project_status'],
             "progress_severity"                 => $data['progress_severity'],
             "conversion_completion_percentage"  => $data['conversion_completion_percentage'],
@@ -600,6 +626,7 @@ class IndexController extends Controller
             "from_date"                         => $fromDate,
             "to_date"                           => $toDate,
             "monthly_conversion_count"          => $monthlyConversionCount,
+            "monthly_communication_count"       => $projectData['monthly_communication_count'],
             "billing_start_date"                => new Carbon($projectData['billing_start_date']),
             "paid_content"                      => $this->_getPaidContentData($projectData),
         ));

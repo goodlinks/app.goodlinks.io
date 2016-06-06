@@ -58,7 +58,13 @@
                     <div class="goodlinker-thumbnail">
                         <img src="{{ project.goodlinker_image }}">
                     </div>
-                    <div class="project-name">{{ project.name }}</div>
+                    <div class="project-name">
+                        {% if is_admin %}
+                            <a href='/project/{{ project.id }}?key={{ project.secret }}' target="_blank">{{ project.name }}</a>
+                        {% else %}
+                            {{ project.name }}
+                        {% endif %}
+                    </div>
                     <div class="date-range">
                         {{ project.from_date.format("M j") }} thru {{ project.to_date.format("M j") }} ({{ project.months }} {{ project.months == 1 ? "month" : "months"}})
                     </div>

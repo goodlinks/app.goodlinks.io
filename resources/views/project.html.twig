@@ -64,6 +64,7 @@
                     <i class="fa fa-user padding-left"></i> {{ website_count }} websites
                     <i class="fa fa-paper-plane-o padding-left"></i> {{ email_count }} {{ email_count == 1 ? "email" : "emails" }}
                     <i class="fa fa-twitter padding-left"></i> {{ tweet_count }} {{ tweet_count == 1 ? "tweet" : "tweets" }}
+                    <i class="fa fa-comment-o padding-left"></i> {{ comment_count }} {{ comment_count == 1 ? "comment" : "comments" }}
                     <i class="fa fa-thumbs-o-up padding-left"></i> {{ conversion_count }} {{ conversion_count == 1 ? "conversion" : "conversions" }}
                 </div>
                 <div class="conversion-details">
@@ -95,7 +96,7 @@
                 <div class="pitch-progress">
                     <div class="fill {{ progress_status }} {{ progress_severity }}" style="width: {{ conversion_completion_percentage == 0 ? "100" : conversion_completion_percentage }}%"></div>
                     <div class="progress-label">
-                        {{ conversion_count }} out of {{ monthly_conversion_count }} conversions
+                        {{ communication_count }} out of {{ monthly_communication_count }} communications
                     </div>
 
                     <div class="day-of-month-indicator" style="left: {{ billing_period_completion_percentage }}%"></div>
