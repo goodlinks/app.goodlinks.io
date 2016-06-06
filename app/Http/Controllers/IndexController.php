@@ -107,7 +107,7 @@ class IndexController extends Controller
         $twig = TwigHelper::twig();
 
         $adminIPs = array_map('trim', explode(',', env('ADMIN_IPS')));
-        $isAdmin = isset($_GET['REMOTE_ADDR']) ? (in_array($_SERVER['REMOTE_ADDR'], $adminIPs)) : false;
+        $isAdmin = isset($_SERVER['REMOTE_ADDR']) ? (in_array($_SERVER['REMOTE_ADDR'], $adminIPs)) : false;
 
         return $twig->render('index.html.twig', array(
             "title"                     => "Projects",
