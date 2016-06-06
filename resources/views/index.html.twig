@@ -65,6 +65,7 @@
                     <div class="project-stats">
                         <i class="fa fa-globe"></i> {{ project.website_count }} websites
                         <i class="fa fa-paper-plane-o padding-left"></i> {{ project.email_count }} {{ project.email_count == 1 ? "email" : "emails" }}
+                        <i class="fa fa-twitter padding-left"></i> {{ project.tweet_count }} {{ project.tweet_count == 1 ? "tweet" : "tweets" }}
                         <i class="fa fa-thumbs-o-up padding-left"></i> {{ project.conversion_count }} {{ project.conversion_count == 1 ? "conversion" : "conversions" }}
                     </div>
                     <div class="conversion-details">
@@ -96,7 +97,7 @@
                     <div class="pitch-progress">
                         <div class="fill {{ project.project_status }} {{ project.progress_severity }}" style="width: {{ project.conversion_completion_percentage == 0 ? "100" : project.conversion_completion_percentage }}%"></div>
                         <div class="progress-label">
-                            {{ project.conversion_count }} out of {{ project.monthly_conversion_count }} conversions
+                            {{ project.communication_count }} out of {{ project.monthly_communication_count }} communications
                         </div>
                         <div class="day-of-month-indicator" style="left: {{ project.billing_period_completion_percentage }}%"></div>
                     </div>

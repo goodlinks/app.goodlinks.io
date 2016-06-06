@@ -74,6 +74,9 @@ class IndexController extends Controller
 
         foreach ($projects as & $projectData) {
             $projectData['email_count'] = $this->_getEmailCount($projectData);
+            $projectData['tweet_count'] = $this->_getTweetCount($projectData);
+            $projectData['communication_count'] = $projectData['email_count'] + $projectData['tweet_count'];
+
             $projectData['website_count'] = $this->_getWebsiteCount($projectData);
             $projectData['introduction_count'] = $this->_getIntroductionCount($projectData);
             $projectData['referral_count'] = $this->_getReferralCount($projectData);
@@ -405,15 +408,15 @@ class IndexController extends Controller
     {
         $months = $this->_getMonthCount($projectData);
         $fromDate = $this->_getFromDate($projectData);
-        $conversionCount = $projectData['conversion_count'];
-        $monthlyConversionCount = $projectData['monthly_conversion_count'] * $months;
+        $communicationCount = $projectData['email_count'] + $projectData['tweet_count'];
+        $monthlyCommunicationCount = $projectData['monthly_communication_count'] * $months;
 
         $today = new Carbon();
         $daysIntoBillingPeriod = $today->diffInDays($fromDate);
         $percentBillingPeriodComplete = ($daysIntoBillingPeriod / (30 * $months)) * 100;
         $percentBillingPeriodComplete = ($percentBillingPeriodComplete > 100) ? 100 : $percentBillingPeriodComplete;
 
-        $percentConversionProgress = ($conversionCount / $monthlyConversionCount) * 100;
+        $percentConversionProgress = ($communicationCount / $monthlyCommunicationCount) * 100;
         $percentConversionProgress = ($percentConversionProgress > 100) ? 100 : $percentConversionProgress;
 
         $diff = $percentConversionProgress - $percentBillingPeriodComplete;
@@ -562,6 +565,9 @@ class IndexController extends Controller
         $twig = TwigHelper::twig();
 
         $projectData['email_count'] = $this->_getEmailCount($projectData);
+        $projectData['tweet_count'] = $this->_getTweetCount($projectData);
+        $projectData['communication_count'] = $projectData['email_count'] + $projectData['tweet_count'];
+
         $projectData['conversion_count'] = $this->_getLinkAgreedCount($projectData)
             + $this->_getPlacementCount($projectData) + $this->_getIntroductionCount($projectData)
             + $this->_getReferralCount($projectData);
@@ -580,7 +586,8 @@ class IndexController extends Controller
             "introduction_count"                => $this->_getIntroductionCount($projectData),
             "referral_count"                    => $this->_getReferralCount($projectData),
             "email_count"                       => $projectData['email_count'],
-            "tweet_count"                       => $this->_getTweetCount($projectData),
+            "tweet_count"                       => $projectData['tweet_count'],
+            "communication_count"               => $projectData['communication_count'],
             "conversion_count"                  => $projectData['conversion_count'],
             'introduction_items'                =>  $this->_getIntroductionItems($projectData),
             'referral_items'                    =>  $this->_getReferralItems($projectData),
