@@ -18,6 +18,9 @@ class AppServiceProvider extends ServiceProvider
         });
         $this->commands('command.goodlinks.import');
 
-        //
+        $this->app->singleton('command.goodlinks.backup', function() {
+            return new \App\Console\Commands\BackupCommand();
+        });
+        $this->commands('command.goodlinks.backup');
     }
 }

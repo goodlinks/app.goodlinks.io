@@ -9,6 +9,7 @@
         "laravel/lumen-framework": "5.2.*",
         "vlucas/phpdotenv": "~2.2",
         "goodlinks/buzzstream-feed": "dev-master",
+        "aws/aws-sdk-php": "^3.18",
         "twig/twig": "^1.24"
     },
     "require-dev": {
