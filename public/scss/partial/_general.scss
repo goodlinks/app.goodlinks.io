@@ -180,6 +180,13 @@ hr {
             opacity: 0.5;
         }
 
+        &.flagged {
+            opacity: 0.5;
+            .item-header {
+                background-color: #ffe3e3;
+            }
+        }
+
         img {
             width: 24px;
             display: inline-block;

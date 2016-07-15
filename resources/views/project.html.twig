@@ -176,7 +176,7 @@
                         $banElement.closest('.feed-item').addClass('ignored');
                     }
                 });
-            })
+            });
             $('.feed-item .fa-flag').click(function() {
                 var $flagElement = $(this);
                 var buzzstreamId = $flagElement.closest('.feed-item').attr('data-buzzstream-id');
@@ -185,7 +185,7 @@
                     url: '/history-item/' + buzzstreamId + '/flag?project_id=' + projectId,
                     method: "GET",
                     success: function(data) {
-                        $flagElement.closest('.feed-item').addClass('ignored');
+                        $flagElement.closest('.feed-item').addClass('flagged');
                     }
                 });
             });

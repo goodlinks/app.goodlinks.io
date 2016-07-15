@@ -738,13 +738,15 @@ class IndexController extends Controller
         }
 
         $headers = "";
-        $headers .= 'From: steve@goodlinks.io' . "\r\n";
+        $headers .= 'From: Steve Nam <steve@goodlinks.io>' . "\r\n";
         $headers .= 'Bcc: steve@goodlinks.io, kalen@goodlinks.io' . "\r\n";
 
-        $subject = $historyItem->getSummary();
+        $subject = substr($historyItem->getSummary(), 0, 100) . "(#$buzzstreamId)";
 
         $body = "We found a problem with this communication. Please review it, reply back and confirm what the issue was so that we're on the same page going forward.";
         $body .= "\r\n\r\nMore info on handling flagged communications: http://docs.goodlinks.io/article/59-handling-flagged-communication";
+        $body .= "\r\n\r\n------------";
+        $body .= "\r\n\r\nWebsite(s): " . $historyItem->getWebsiteNames();
         $body .= "\r\n\r\n" . $historyItem->getBody();
 
         mail($goodlinkerEmail, "Communication Flagged: $subject", $body, $headers);
