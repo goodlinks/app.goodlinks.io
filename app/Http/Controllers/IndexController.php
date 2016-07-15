@@ -738,19 +738,16 @@ class IndexController extends Controller
         }
 
         $headers = "";
-        $headers .= 'To: Mary <mary@example.com>, Kelly <kelly@example.com>' . "\r\n";
         $headers .= 'From: steve@goodlinks.io' . "\r\n";
-        $headers .= 'Bcc: steve@goodlinks.io' . "\r\n";
+        $headers .= 'Bcc: steve@goodlinks.io, kalen@goodlinks.io' . "\r\n";
+
         $subject = $historyItem->getSummary();
-        $body = "We found a problem with this communication.  It's likely one of:
-        - Typo or grammatical error
-        - Issue with tone
 
-        Please review it, reply back and confirm what the issue was so that we're
-        on the same page going forward.
+        $body = "We found a problem with this communication. Please review it, reply back and confirm what the issue was so that we're on the same page going forward.";
+        $body .= "\r\n\r\nMore info on handling flagged communications: http://docs.goodlinks.io/article/59-handling-flagged-communication";
+        $body .= "\r\n\r\n" . $historyItem->getBody();
 
-        " . $historyItem->getBody();
-        mail($goodlinkerEmail, "Communication Flagged: $subject", nl2br($body), $headers);
+        mail($goodlinkerEmail, "Communication Flagged: $subject", $body, $headers);
 
         return array(
             'success'       => true,
