@@ -11,3 +11,4 @@ $app->get( '/import',                               'IndexController@import');
 $app->get( '/importIncremental',                    'IndexController@importBuzzstreamIncremental');
 $app->get( '/processFeedInitial',                   'IndexController@importBuzzstreamInitial');
 $app->get( '/history-item/{buzzstream_id}/ignore',  'IndexController@ignoreHistoryItem');
+$app->get( '/history-item/{buzzstream_id}/flag',    'IndexController@flagHistoryItem');

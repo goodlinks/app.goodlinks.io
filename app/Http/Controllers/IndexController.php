@@ -6,6 +6,7 @@ use App\Helper\TwigHelper;
 use App\Model\Article;
 use App\Model\HistoryItem;
 use App\Model\Importer;
+use App\Model\HistoryItemProject;
 
 use Carbon\Carbon;
 use GoodLinks\BuzzStreamFeed\Api;
@@ -702,6 +703,54 @@ class IndexController extends Controller
     {
         $historyItem = HistoryItem::findByBuzzstreamId($buzzstreamId);
         $historyItem->setIsIgnored(true)->save();
+
+        return array(
+            'success'       => true,
+            'buzzstream_id' => $buzzstreamId,
+        );
+    }
+
+    public function flagHistoryItem($buzzstreamId)
+    {
+        try {
+            return $this->_flagHistoryItem($buzzstreamId);
+        } catch (\Exception $e) {
+            return array(
+                'success' => false,
+                'message' => $e->getMessage(),
+            );
+        }
+    }
+
+    protected function _flagHistoryItem($buzzstreamId)
+    {
+        $historyItem = HistoryItem::findByBuzzstreamId($buzzstreamId);
+        $projectId = isset($_GET['project_id']) ? $_GET['project_id'] : null;
+        if (! $projectId) {
+            throw new \Exception("Missing project ID");
+        }
+
+        $projectData = $this->_getProjectData($projectId);
+
+        $goodlinkerEmail = isset($projectData['goodlinker_email']) ? $projectData['goodlinker_email'] : null;
+        if (! $goodlinkerEmail) {
+            throw new \Exception("No email found for project: $projectId");
+        }
+
+        $headers = "";
+        $headers .= 'To: Mary <mary@example.com>, Kelly <kelly@example.com>' . "\r\n";
+        $headers .= 'From: steve@goodlinks.io' . "\r\n";
+        $headers .= 'Bcc: steve@goodlinks.io' . "\r\n";
+        $subject = $historyItem->getSummary();
+        $body = "We found a problem with this communication.  It's likely one of:
+        - Typo or grammatical error
+        - Issue with tone
+
+        Please review it, reply back and confirm what the issue was so that we're
+        on the same page going forward.
+
+        " . $historyItem->getBody();
+        mail($goodlinkerEmail, "Communication Flagged: $subject", nl2br($body), $headers);
 
         return array(
             'success'       => true,

@@ -222,7 +222,7 @@ hr {
   color: #B5B5B5;
 }
 /* line 211, ../scss/partial/_general.scss */
-.project-wrapper .feed .feed-item .item-header .item-type .fa-ban {
+.project-wrapper .feed .feed-item .item-header .item-type .fa-ban, .project-wrapper .feed .feed-item .item-header .item-type .fa-flag {
   padding-right: 6px;
   cursor: pointer;
 }

@@ -118,7 +118,7 @@
                     </div>
                 {% endif %}
             </div>
-            <div class="feed">
+            <div class="feed" data-project-id="{{ project_data.id }}">
                 {% for item in history %}
                     <div class="feed-item" data-buzzstream-id="{{ item.getBuzzstreamId() }}">
                         <div class="item-header">
@@ -128,7 +128,8 @@
                                 - {{ item.getWebsiteNames() }}
                             {% endif %}
                             <span class="item-type">
-                                <i class="fa fa-ban"></i>
+                                <i class="fa fa-flag tooltip" data-tooltip="Report an issue"></i>
+                                <i class="fa fa-ban tooltip" data-tooltip="Ignore (don't include in communication count)"></i>
 
                                 {% if item.getType() == 'Tweet' %}
                                     <i class="fa fa-twitter"></i>
@@ -176,6 +177,18 @@
                     }
                 });
             })
+            $('.feed-item .fa-flag').click(function() {
+                var $flagElement = $(this);
+                var buzzstreamId = $flagElement.closest('.feed-item').attr('data-buzzstream-id');
+                var projectId = $flagElement.closest('.feed').attr('data-project-id');
+                $.ajax({
+                    url: '/history-item/' + buzzstreamId + '/flag?project_id=' + projectId,
+                    method: "GET",
+                    success: function(data) {
+                        $flagElement.closest('.feed-item').addClass('ignored');
+                    }
+                });
+            });
         });
     </script>
 </body>
