@@ -38,10 +38,10 @@ class BackupCommand extends Command {
      */
     public function fire()
     {
-        $this->info("Running backup");
+        $this->_info("Running backup");
         $this->_dumpDatabase();
         $usage = $this->_getDiskUsage();
-        $this->info("Usage: $usage %");
+        $this->_info("Usage: $usage %");
 
         $this->_sendToS3();
         $this->_deleteDump();
@@ -56,10 +56,10 @@ class BackupCommand extends Command {
 
         $destinationFilePath = $this->_getDestinationFilePath();
 
-        $this->info("Backing up database $dbName to $destinationFilePath");
+        $this->_info("Backing up database $dbName to $destinationFilePath");
         shell_exec("mysqldump --single-transaction -u$username -p$password $dbName > $destinationFilePath");
 
-        $this->info("Compressing database $dbName to $destinationFilePath.gz");
+        $this->_info("Compressing database $dbName to $destinationFilePath.gz");
         shell_exec("gzip $destinationFilePath");
     }
 
@@ -72,7 +72,7 @@ class BackupCommand extends Command {
     protected function _deleteDump()
     {
         $destinationFilePathCompressed = $this->_getDestinationFilePath() . ".gz";
-        $this->info("Deleting dump: $destinationFilePathCompressed");
+        $this->_info("Deleting dump: $destinationFilePathCompressed");
         shell_exec("rm $destinationFilePathCompressed");
 
         return $this;
@@ -124,7 +124,7 @@ class BackupCommand extends Command {
         ));
 
         $sourceFile = $this->_getDestinationFilePath() . ".gz";
-        $this->info("Sending to S3: " . $sourceFile);
+        $this->_info("Sending to S3: " . $sourceFile);
 
         try {
             $s3->putObject(array(
@@ -146,5 +146,12 @@ class BackupCommand extends Command {
         $email = env('BACKUP_NOTIFICATION_EMAIL');
         $subject = env('BACKUP_NOTIFICATION_SUBJECT');
         mail($email, "$subject (Usage: $usage%)", "Backup complete - usage: $usage%", "From: cron@magemail.co");
+    }
+
+    protected function _info($message)
+    {
+        if (! $this->option('silent')) {
+            $this->info($message);
+        }
     }
 }
