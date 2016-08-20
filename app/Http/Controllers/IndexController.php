@@ -163,88 +163,89 @@ class IndexController extends Controller
         Api::setConsumerKey(getenv('BUZZSTREAM_CONSUMER_KEY'));
         Api::setConsumerSecret(getenv('BUZZSTREAM_CONSUMER_SECRET'));
 
-        $monthlyPitchCount = getenv('TEAM_MEMBER_MONTHLY_PITCH_COUNT');
-
         $path = dirname(dirname(dirname(dirname(__FILE__)))) . "/.projects.json";
         $projects = json_decode(file_get_contents($path), true);
         if (! $projects) {
             die("Couldn't find projects json data");
         }
 
-        $fromDate = new Carbon("2016-03-01");
-        $toDate = $fromDate->copy()->addMonth();
+        $numDays = isset($_GET['days']) ? $_GET['days'] : 10;
+        $fromDate = new Carbon(isset($_GET['from']) ? $_GET['from'] : '2016-01-01');
+        $toDate = $fromDate->copy()->addDays($numDays);
 
         $buzzstreamUsers = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
             ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
-            ->where('type', '=', 'Stage')
+            ->whereIn('type', array('EMail', 'Tweet', 'Blog Comment', 'Call'))
             ->where('is_ignored', '=', 0)
-            ->where('summary', 'like', "Relationship stage changed to: Pitched")
-            ->whereNotNull('buzzstream_owner_id')
-            ->groupBy('buzzstream_owner_id')
+            ->groupBy('buzzstream_owner_id', 'the_day')
+            ->groupBy('the_day')
             ->select(array(
                 'buzzstream_owner_id as buzzstream_user_id',
-                DB::raw('count(*) as pitch_count'),
+                DB::raw('count(*) as outreach_count'),
+                DB::raw('date_format(buzzstream_created_at, "%Y-%m-%d") as the_day')
             ))
             ->get();
 
-        $users = array();
-        foreach ($buzzstreamUsers as $buzzstreamUserData) {
-            $buzzstreamUserUrl = "https://api.buzzstream.com/v1/users/" . $buzzstreamUserData['buzzstream_user_id'];
-            $buzzstreamUser = new User();
-            $buzzstreamUser->load($buzzstreamUserUrl);
+        $outreachCountByUser = array();
 
-            // Can replace this with email count $pitchCount = $this->_getEmailCountByUser($buzzstreamUser, $fromDate, $toDate);
-            $pitchCount = 0;
-            $emailCount = 0;
+        /** @var HistoryItem $user */
+        foreach ($buzzstreamUsers as $user) {
+            if (! isset($outreachCountByUser[$user->buzzstream_user_id])) {
+                $name = env('USER_' . $user->buzzstream_user_id . '_NAME');
+                $color = env('USER_' . $user->buzzstream_user_id . '_COLOR');
 
-            $today = new Carbon();
-            $daysIntoBillingPeriod = $today->diffInDays($fromDate);
-            $percentBillingPeriodComplete = ($daysIntoBillingPeriod / 30) * 100;
-            $percentBillingPeriodComplete = ($percentBillingPeriodComplete > 100) ? 100 : $percentBillingPeriodComplete;
+                $outreachCountByUser[$user->buzzstream_user_id] = array(
+                    'name'  => $name ? $name : "Outreacher #{$user->buzzstream_user_id}",
+                    'color' => $color ? $color : "gray",
+                );
+            }
 
-            $percentPitchProgress = ($pitchCount / $monthlyPitchCount) * 100;
-            $percentPitchProgress = ($percentPitchProgress > 100) ? 100 : $percentPitchProgress;
+            $outreachCountByUser[$user->buzzstream_user_id]['data'][$user->the_day] = $user->outreach_count;
+        }
 
-            $diff = $percentPitchProgress - $percentBillingPeriodComplete;
-            $status = $percentPitchProgress >= $percentBillingPeriodComplete ? "ahead-schedule" : "behind-schedule";
-            $severity = abs($diff) > 10 ? "lot" : "little";
+        $theDay = $fromDate->copy();
+        $days = array();
 
-            $websiteCount = $this->_getWebsiteCountByUser($buzzstreamUser, $fromDate, $toDate);
-            $introductionCount = $this->_getIntroductionCountByUser($buzzstreamUser, $fromDate, $toDate);
-            $referralCount = $this->_getReferralCountByUser($buzzstreamUser, $fromDate, $toDate);
-            $placementCount = $this->_getReferralCountByUser($buzzstreamUser, $fromDate, $toDate);
-            $linkAgreedCount = $this->_getReferralCountByUser($buzzstreamUser, $fromDate, $toDate);
-            $conversionCount = $this->_getReferralCountByUser($buzzstreamUser, $fromDate, $toDate);
-            $conversionRate = ($pitchCount > 0) ? number_format($conversionCount / $pitchCount * 100, 1) : 0;
-
-            $users[] = array(
-                'name'                                  => $buzzstreamUser->getName(),
-                'email'                                 => $buzzstreamUser->getEmail(),
-                'image_url'                             => 'http://www.gravatar.com/avatar/' . md5($buzzstreamUser->getEmail()),
-                'pitch_completion_percentage'           => $percentPitchProgress,
-                'billing_period_completion_percentage'  => $percentBillingPeriodComplete,
-                'progress_status'                       => $status,
-                'progress_severity'                     => $severity,
-                'email_count'                           => $emailCount,
-                'website_count'                         => $websiteCount,
-                'introduction_count'                    => $introductionCount,
-                'referral_count'                        => $referralCount,
-                'placement_count'                       => $placementCount,
-                'link_agreed_count'                     => $linkAgreedCount,
-                'conversion_count'                      => $conversionCount,
-                'conversion_rate'                       => $conversionRate,
-            );
+        for ($i = 0; $i < $numDays; $i++) {
+            $days[] = $theDay->format("Y-m-d");
+            foreach ($buzzstreamUsers as $user) {
+                if (! isset($outreachCountByUser[$user->buzzstream_user_id]['data'][$theDay->format("Y-m-d")])) {
+                    $outreachCountByUser[$user->buzzstream_user_id]['data'][$theDay->format("Y-m-d")] = 0;
+                }
+            }
+            $theDay->addDay();
         }
 
         $twig = TwigHelper::twig();
 
+        /*
+        $outreachCountByUser = array(
+            array(
+                'name' => 'Kalen',
+                'color' => 'red',
+                'data' => array(
+                    '2016-08-01' => 52,
+                    '2016-08-02' => 53,
+                ),
+            ),
+            array(
+                'name' => 'Steve',
+                'color' => 'blue',
+                'data' => array(
+                    '2016-08-01' => 22,
+                    '2016-08-02' => 33,
+                ),
+            ),
+        );
+
+        */
         return $twig->render('team.html.twig', array(
-            "title"                 => "Team",
-            "body_class"            => "home",
-            "users"                 => $users,
-            "monthly_pitch_count"   => $monthlyPitchCount,
-            'from_date'             => $fromDate,
-            'to_date'               => $toDate,
+            "title"                     => "Team",
+            "body_class"                => "home",
+            'from_date'                 => $fromDate,
+            'to_date'                   => $toDate,
+            'outreach_count_by_user'    => $outreachCountByUser,
+            'days'                      => array_values($days),
         ));
     }
 

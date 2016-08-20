@@ -10,6 +10,7 @@
         {# If these are async the button wave didn't work right at one point.  Seems to
            be working now though. #}
         <script src="/js/external/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.js"></script>
         <link rel="shortcut icon" type="image/png" href="https://media.simplecast.com/podcast/favicon_image/1623/x16_1453500952-favicon.png" />
 
         <title>Team Overview | Goodlinks BuzzStream Feed</title>
@@ -45,52 +46,63 @@
                 </g>
             </g>
         </svg>
-        <h1>Team Overview</h1>
+        <h1>Team Overview: {{ from_date|date('M d, Y') }} to {{ to_date|date('M d, Y') }}</h1>
+
     </div>
     <div class="project-list">
-        {% for user in users %}
-            <div class="project-wrapper">
-                <div class="project-summary">
-                    <div class="project-thumbnail"><img src="{{ user.image_url }}"></div>
-                    <div class="project-name">{{ user.name }} </div>
-                    <div class="date-range">
-                        {{ from_date.format("M j") }} thru {{ to_date.format("M j") }}
-                    </div>
-                    <div class="project-stats">
-                    <span class="conversion-rate">
-                        <i class="fa fa-signal"></i> {{ user.conversion_rate }}%
-                    </span>
-                        <i class="fa fa-globe padding-left"></i> {{ user.website_count }} websites
-                        <i class="fa fa-paper-plane-o padding-left"></i> {{ user.pitch_count }} {{ user.pitch_count == 1 ? "pitch" : "pitches" }}
-                        <i class="fa fa-thumbs-o-up padding-left"></i> {{ user.conversion_count }} {{ user.conversion_count == 1 ? "conversion" : "conversions" }}
-                    </div>
-                    <div class="conversion-details">
-                        {% if user.introduction_count %}
-                            <i class="fa fa-comments"></i> <span style="padding-right: 10px;">{{ user.introduction_count }} {{ user.introduction_count == 1 ? "introduction" : "introductions" }}</span>
-                        {% endif %}
-                        {% if user.referral_count %}
-                            <i class="fa fa-money"></i> <span style="padding-right: 10px;">{{ user.referral_count }} {{ user.referral_count == 1 ? "referral" : "referrals" }}</span>
-                        {% endif %}
-                        {% if user.link_agreed_count %}
-                            <i class="fa fa-link"></i> <span style="padding-right: 10px;">{{ user.link_agreed_count }} {{ user.link_agreed_count == 1 ? "planned links" : "planned links" }}</span>
-                        {% endif %}
-                        {% if user.placement_count %}
-                            <i class="fa fa-link"></i> <span style="padding-right: 10px;">{{ user.placement_count }} {{ user.placement_count == 1 ? "placement" : "placements" }}</span>
-                        {% endif %}
-                    </div>
-                    <div class="pitch-progress">
-                        <div class="fill {{ user.progress_status }} {{ user.progress_severity }}" style="width: {{ user.pitch_completion_percentage == 0 ? "100" : user.pitch_completion_percentage }}%"></div>
-                        <div class="progress-label">
-                            {{ user.pitch_count }} out of {{ monthly_pitch_count }} pitches
-                        </div>
-                        <div class="day-of-month-indicator" style="left: {{ user.billing_period_completion_percentage }}%"></div>
-                    </div>
-                </div>
-            </div>
-            {% if loop.last == false %}
-                <hr/>
-            {% endif %}
-        {% endfor %}
+        <canvas id="myChart" width="400" height="400"></canvas>
+        <script>
+            var ctx = document.getElementById("myChart");
+            var data = {
+                labels: [
+                    {% for day in days %}
+                    {{ day }}{{ loop.last ? "" : "," }}
+                    {% endfor %}
+                ],
+                datasets: [
+                    {% for user in outreach_count_by_user %}
+                {
+                    label: "{{ user.name }}",
+                    fill: false,
+                    lineTension: 0.1,
+                    backgroundColor: "{{ user.color }}",
+                    borderColor: "{{ user.color }}",
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'miter',
+                    pointBorderColor: "rgba(75,192,192,1)",
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                    pointHoverBorderColor: "rgba(220,220,220,1)",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    data: [
+                        {% for day,count in user.data  %}
+                            {{ count }}{{ loop.last ? "" : "," }}
+                        {% endfor %}
+                    ],
+                    spanGaps: false
+                }{{ loop.last ? "" : "," }}
+                    {% endfor %}
+            ]
+            };
+
+            new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    scales: {
+                        xAxes: [{
+                            display: false
+                        }]
+                    }
+                }
+            });
+        </script>
     </div>
 </div>
 </body>
