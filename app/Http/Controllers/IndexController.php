@@ -207,7 +207,7 @@ class IndexController extends Controller
         $theDay = $fromDate->copy();
         $days = array();
 
-        for ($i = 0; $i < $numDays; $i++) {
+        for ($i = 0; $i <= $numDays; $i++) {
             $days[] = $theDay->format("Y-m-d");
             foreach ($buzzstreamUsers as $user) {
                 if (! isset($outreachCountByUser[$user->buzzstream_user_id]['data'][$theDay->format("Y-m-d")])) {
