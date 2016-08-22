@@ -169,8 +169,9 @@ class IndexController extends Controller
             die("Couldn't find projects json data");
         }
 
+        $today = new Carbon();
         $numDays = isset($_GET['days']) ? $_GET['days'] : 10;
-        $fromDate = new Carbon(isset($_GET['from']) ? $_GET['from'] : '2016-01-01');
+        $fromDate = new Carbon(isset($_GET['from']) ? $_GET['from'] : $today->subDays(10));
         $toDate = $fromDate->copy()->addDays($numDays);
 
         $buzzstreamUsers = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
