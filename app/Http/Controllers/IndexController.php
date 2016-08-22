@@ -175,7 +175,7 @@ class IndexController extends Controller
         $toDate = $fromDate->copy()->addDays($numDays);
 
         $buzzstreamUsers = HistoryItem::where('buzzstream_created_at', '>=', $fromDate->format('Y-m-d'))
-            ->where('buzzstream_created_at', '<=', $toDate->format('Y-m-d'))
+            ->where(DB::raw('date_format(buzzstream_created_at, "%Y-%m-%d")'), '<=', $toDate->format('Y-m-d'))
             ->whereIn('type', array('EMail', 'Tweet', 'Blog Comment', 'Call'))
             ->where('is_ignored', '=', 0)
             ->groupBy('buzzstream_owner_id', 'the_day')
