@@ -52,7 +52,7 @@
                 {{ from_date.format("M j") }} thru {{ to_date.format("M j") }}
 
                 {% if from_date > billing_start_date %}
-                    <br><a href="?project={{ project_data.id }}&key={{ project_data.secret }}&from={{ from_date.subMonth().format("Y-m-d") }}"><i class="fa fa-arrow-left"></i></a>
+                    <br><a href="?project={{ project_data.id }}&key={{ project_data.secret }}&to={{ from_date.format("Y-m-d") }}"><i class="fa fa-arrow-left"></i></a>
                 {% endif %}
             </div>
         </div>
