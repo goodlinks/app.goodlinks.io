@@ -105,6 +105,7 @@
                         <div class="fill {{ project.project_status }} {{ project.progress_severity }}" style="width: {{ project.conversion_completion_percentage == 0 ? "100" : project.conversion_completion_percentage }}%"></div>
                         <div class="progress-label">
                             {{ project.communication_count }} out of {{ project.monthly_communication_count }} communications
+                            {{ project.communication_count_behind ~ " behind" }}
                         </div>
                         <div class="day-of-month-indicator" style="left: {{ project.billing_period_completion_percentage }}%"></div>
                     </div>

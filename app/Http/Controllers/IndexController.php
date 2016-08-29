@@ -96,6 +96,7 @@ class IndexController extends Controller
             $projectData['progress_severity'] = $data['progress_severity'];
             $projectData['conversion_completion_percentage'] = $data['conversion_completion_percentage'];
             $projectData['billing_period_completion_percentage'] = $data['billing_period_completion_percentage'];
+            $projectData['communication_count_behind'] = $data['communication_count_behind'];
 
             $projectData['from_date'] = $this->_getFromDate($projectData);
             $projectData['to_date'] = $this->_getToDate($projectData);
@@ -214,6 +215,7 @@ class IndexController extends Controller
                     $outreachCountByUser[$user->buzzstream_user_id]['data'][$theDay->format("Y-m-d")] = 0;
                 }
             }
+            ksort($outreachCountByUser[$user->buzzstream_user_id]['data']);
             $theDay->addDay();
         }
 
@@ -450,8 +452,13 @@ class IndexController extends Controller
         $status = $percentConversionProgress >= $percentBillingPeriodComplete ? "ahead-schedule" : "behind-schedule";
         $severity = abs($diff) > 10 ? "lot" : "little";
 
+        $amountBehind = (int)((($percentBillingPeriodComplete - $percentConversionProgress) / 100) * ($monthlyCommunicationCount));
+        echo "<!-- Behind: $amountBehind (Communicaiton count:$communicationCount) -->";
+        //echo "monthly: $monthlyCommunicationCount<br>behind: $amountBehind <br>count: $communicationCount <br>bill complete: $percentBillingPeriodComplete<br>conversion progress: $percentConversionProgress<br><br>";
+
         return array(
             'project_status'                        => $status,
+            'communication_count_behind'            => $amountBehind,
             'progress_severity'                     => $severity,
             'conversion_completion_percentage'      => $percentConversionProgress,
             'billing_period_completion_percentage'  => $percentBillingPeriodComplete,
