@@ -82,12 +82,14 @@ class IndexController extends Controller
             $projectData['website_count'] = $this->_getWebsiteCount($projectData);
             $projectData['introduction_count'] = $this->_getIntroductionCount($projectData);
             $projectData['referral_count'] = $this->_getReferralCount($projectData);
+            $projectData['warm_count'] = $this->_getWarmCount($projectData);
             $projectData['placement_count'] = $this->_getPlacementCount($projectData);
             $projectData['link_agreed_count'] = $this->_getLinkAgreedCount($projectData);
             $projectData['conversion_count'] = $projectData['link_agreed_count'] + $projectData['placement_count'] + $projectData['introduction_count'] + $projectData['referral_count'];
 
             $projectData['introduction_items'] = $this->_getIntroductionItems($projectData);
             $projectData['referral_items'] = $this->_getReferralItems($projectData);
+            $projectData['warm_items'] = $this->_getWarmItems($projectData);
             $projectData['placement_items'] = $this->_getPlacementItems($projectData);
             $projectData['link_agreed_items'] = $this->_getLinkAgreedItems($projectData);
 
@@ -380,6 +382,11 @@ class IndexController extends Controller
         return $this->_getRelationshipStageCount($projectData, 'Referr%');
     }
 
+    protected function _getWarmCount($projectData)
+    {
+        return $this->_getRelationshipStageCount($projectData, 'Warm');
+    }
+
     protected function _getPlacementCount($projectData)
     {
         return $this->_getRelationshipStageCount($projectData, 'Successful Placement');
@@ -399,6 +406,11 @@ class IndexController extends Controller
     {
         // I typo'd it initially as "Referrred"
         return $this->_getItemsByRelationshipStage($projectData, 'Referr%');
+    }
+
+    protected function _getWarmItems($projectData)
+    {
+        return $this->_getItemsByRelationshipStage($projectData, 'Warm');
     }
 
     protected function _getPlacementItems($projectData)
@@ -593,6 +605,7 @@ class IndexController extends Controller
         $monthlyConversionCount = $projectData['monthly_conversion_count'];
 
         $projectData['referral_items'] = $this->_getReferralItems($projectData);
+        $projectData['warm_items'] = $this->_getWarmItems($projectData);
         $projectData['placement_items'] = $this->_getPlacementItems($projectData);
         $projectData['link_agreed_items'] = $this->_getLinkAgreedItems($projectData);
 
@@ -620,6 +633,7 @@ class IndexController extends Controller
             "link_agreed_count"                 => $linkAgreedCount,
             "introduction_count"                => $this->_getIntroductionCount($projectData),
             "referral_count"                    => $this->_getReferralCount($projectData),
+            "warm_count"                        => $this->_getWarmCount($projectData),
             "email_count"                       => $projectData['email_count'],
             "tweet_count"                       => $projectData['tweet_count'],
             "comment_count"                     => $projectData['comment_count'],
@@ -627,6 +641,7 @@ class IndexController extends Controller
             "conversion_count"                  => $projectData['conversion_count'],
             'introduction_items'                => $this->_getIntroductionItems($projectData),
             'referral_items'                    => $this->_getReferralItems($projectData),
+            'warm_items'                        => $this->_getWarmItems($projectData),
             'placement_items'                   => $this->_getPlacementItems($projectData),
             'link_agreed_items'                 => $this->_getLinkAgreedItems($projectData),
             "progress_status"                   => $data['project_status'],
@@ -747,8 +762,8 @@ class IndexController extends Controller
         }
 
         $headers = "";
-        $headers .= 'From: Steve Nam <steve@goodlinks.io>' . "\r\n";
-        $headers .= 'Bcc: steve@goodlinks.io, kalen@goodlinks.io' . "\r\n";
+        $headers .= 'From: Goodlinks QA <qa@goodlinks.io>' . "\r\n";
+        $headers .= 'Bcc: kalen@goodlinks.io' . "\r\n";
 
         $subject = substr($historyItem->getSummary(), 0, 100) . "(#$buzzstreamId)";
 

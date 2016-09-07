@@ -88,6 +88,12 @@
                                 {{ project.referral_count }} {{ project.referral_count == 1 ? "referral" : "referrals" }}
                             </span>
                         {% endif %}
+                        {% if project.warm_count %}
+                            <i class="fa fa-fire"></i>
+                            <span class="{{ is_admin ? "tooltip" : "" }} conversion-count" title="{% for item in project.warm_items %}{{ is_admin ? item.getWebsiteNames() : "" }}{{ loop.last ? "" : ", " }}{% endfor %}">
+                                {{ project.warm_count }} {{ project.warm_count == 1 ? "warm lead" : "warm leads" }}
+                            </span>
+                        {% endif %}
                         {% if project.link_agreed_count %}
                             <i class="fa fa-link"></i>
                             <span class="{{ is_admin ? "tooltip" : "" }} conversion-count" title="{% for item in project.link_agreed_items %}{{ is_admin ? item.getWebsiteNames() : "" }}{{ loop.last ? "" : ", " }}{% endfor %}">
@@ -105,7 +111,7 @@
                         <div class="fill {{ project.project_status }} {{ project.progress_severity }}" style="width: {{ project.conversion_completion_percentage == 0 ? "100" : project.conversion_completion_percentage }}%"></div>
                         <div class="progress-label">
                             {{ project.communication_count }} out of {{ project.monthly_communication_count }} communications
-                            {{ project.communication_count_behind ~ " behind" }}
+                            {{ project.communication_count_behind > 0 ? "(" ~ project.communication_count_behind ~ " behind)" : "" }}
                         </div>
                         <div class="day-of-month-indicator" style="left: {{ project.billing_period_completion_percentage }}%"></div>
                     </div>

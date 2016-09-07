@@ -80,6 +80,12 @@
                             {{ referral_count }} {{ referral_count == 1 ? "referral" : "referrals" }}
                         </span>
                     {% endif %}
+                    {% if warm_count %}
+                        <i class="fa fa-fire"></i>
+                        <span class="tooltip conversion-count" title="{% for item in warm_items %}{{ item.getWebsiteNames() }}{{ loop.last ? "" : ", " }}{% endfor %}">
+                            {{ warm_count }} {{ warm_count == 1 ? "warm lead" : "warm leads" }}
+                        </span>
+                    {% endif %}
                     {% if link_agreed_count %}
                         <i class="fa fa-link"></i>
                         <span class="tooltip conversion-count" title="{% for item in link_agreed_items %}{{ item.getWebsiteNames() }}{{ loop.last ? "" : ", " }}{% endfor %}">
