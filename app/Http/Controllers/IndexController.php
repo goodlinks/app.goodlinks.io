@@ -10,6 +10,7 @@ use App\Model\HistoryItemProject;
 
 use Carbon\Carbon;
 use GoodLinks\BuzzStreamFeed\Api;
+use GoodLinks\BuzzStreamFeed\Project;
 use GoodLinks\BuzzStreamFeed\User;
 use DB;
 
@@ -95,6 +96,7 @@ class IndexController extends Controller
 
             $data = $this->_getProjectStatusData($projectData);
             $projectData['project_status'] = $data['project_status'];
+            $projectData['oldest_communication_date'] = $data['oldest_communication_date'];
             $projectData['progress_severity'] = $data['progress_severity'];
             $projectData['conversion_completion_percentage'] = $data['conversion_completion_percentage'];
             $projectData['billing_period_completion_percentage'] = $data['billing_period_completion_percentage'];
@@ -452,6 +454,12 @@ class IndexController extends Controller
         $communicationCount = $projectData['email_count'] + $projectData['tweet_count'] + $projectData['comment_count'];
         $monthlyCommunicationCount = $projectData['monthly_communication_count'] * $months;
 
+        Api::setConsumerKey(getenv('BUZZSTREAM_CONSUMER_KEY'));
+        Api::setConsumerSecret(getenv('BUZZSTREAM_CONSUMER_SECRET'));
+
+        $buzzstreamProject = (new Project())->load($projectData['buzzstream_api_url']);
+        $oldestCommunicationDate = $buzzstreamProject->getOldestCommunicationDate();
+
         $today = new Carbon();
         $daysIntoBillingPeriod = $today->diffInDays($fromDate);
         $percentBillingPeriodComplete = ($daysIntoBillingPeriod / (30 * $months)) * 100;
@@ -474,6 +482,7 @@ class IndexController extends Controller
             'progress_severity'                     => $severity,
             'conversion_completion_percentage'      => $percentConversionProgress,
             'billing_period_completion_percentage'  => $percentBillingPeriodComplete,
+            'oldest_communication_date'             => $oldestCommunicationDate,
         );
     }
 

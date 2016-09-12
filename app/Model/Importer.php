@@ -5,6 +5,7 @@ namespace App\Model;
 use GoodLinks\BuzzStreamFeed\Api;
 use GoodLinks\BuzzStreamFeed\History;
 use DB;
+use GoodLinks\BuzzStreamFeed\Project;
 
 class Importer
 {
@@ -47,6 +48,11 @@ class Importer
                     'history_item_id'       => $item->getId(),
                     'buzzstream_project_id' => $projectId,
                 ));
+
+                $project = new Project();
+                $projectUrl = Api::$apiUrl . '/projects/' . $projectId;
+                $project->load($projectUrl);
+                $project->calculateOldestCommunicationDateIfNotCached();
             }
 
             $buzzstreamWebsiteIds = $buzzstreamHistoryItem->getBuzzstreamWebsiteIds();

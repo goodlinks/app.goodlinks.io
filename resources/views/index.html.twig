@@ -49,6 +49,7 @@
             </g>
         </svg>
     </div>
+    {% set communication_count_behind_total = 0 %}
     <div class="project-list">
         {% for project in projects %}
         {% if project.active and (project.admin_only == false or is_admin) %}
@@ -67,6 +68,9 @@
                     </div>
                     <div class="date-range">
                         {{ project.from_date.format("M j") }} thru {{ project.to_date.format("M j") }} ({{ project.months }} {{ project.months == 1 ? "month" : "months"}})
+                    </div>
+                    <div class="last-communication {{ project.oldest_communication_date < "now"|date|date_modify("-100 days")|date("Y-m-d") ? "communication-behind" : "" }}">
+                        Last Communication: {{ project.oldest_communication_date|date("D, M j")  }}
                     </div>
                     <div class="project-stats">
                         <i class="fa fa-globe"></i> {{ project.website_count }} websites
@@ -111,7 +115,10 @@
                         <div class="fill {{ project.project_status }} {{ project.progress_severity }}" style="width: {{ project.conversion_completion_percentage == 0 ? "100" : project.conversion_completion_percentage }}%"></div>
                         <div class="progress-label">
                             {{ project.communication_count }} out of {{ project.monthly_communication_count }} communications
-                            {{ project.communication_count_behind > 0 ? "(" ~ project.communication_count_behind ~ " behind)" : "" }}
+                            {% if project.communication_count_behind > 0 %}
+                                {% set communication_count_behind_total = communication_count_behind_total + project.communication_count_behind %}
+                                ( {{ project.communication_count_behind }} behind)
+                            {% endif %}
                         </div>
                         <div class="day-of-month-indicator" style="left: {{ project.billing_period_completion_percentage }}%"></div>
                     </div>
@@ -137,6 +144,7 @@
             {% endif %}
         {% endif %}
         {% endfor %}
+        ( {{ communication_count_behind_total }} communications behind)
     </div>
 </div>
 <script type="text/javascript">

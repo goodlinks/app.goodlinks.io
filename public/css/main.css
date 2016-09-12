@@ -90,54 +90,62 @@ hr {
   font-size: 14px;
 }
 /* line 85, ../scss/partial/_general.scss */
+.project-wrapper .project-summary .last-communication {
+  font-size: 14px;
+}
+/* line 88, ../scss/partial/_general.scss */
+.project-wrapper .project-summary .last-communication.communication-behind {
+  color: red;
+}
+/* line 93, ../scss/partial/_general.scss */
 .project-wrapper .project-summary i.padding-left {
   padding-left: 10px;
 }
-/* line 89, ../scss/partial/_general.scss */
+/* line 97, ../scss/partial/_general.scss */
 .project-wrapper .project-summary i.padding-right {
   padding-right: 10px;
 }
-/* line 93, ../scss/partial/_general.scss */
+/* line 101, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .project-thumbnail {
   float: right;
 }
-/* line 95, ../scss/partial/_general.scss */
+/* line 103, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .project-thumbnail img {
   width: 55px;
 }
-/* line 100, ../scss/partial/_general.scss */
+/* line 108, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .goodlinker-thumbnail {
   width: 46px;
   float: right;
   margin-right: 15px;
   padding-top: 4px;
 }
-/* line 106, ../scss/partial/_general.scss */
+/* line 114, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .goodlinker-thumbnail img {
   border-radius: 50%;
   width: 100%;
   -webkit-filter: grayscale(100%);
 }
-/* line 113, ../scss/partial/_general.scss */
+/* line 121, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .project-name {
   font-size: 20px;
   line-height: 31px;
   font-weight: bold;
 }
-/* line 119, ../scss/partial/_general.scss */
+/* line 127, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .conversion-rate {
   color: green;
 }
-/* line 123, ../scss/partial/_general.scss */
+/* line 131, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .conversion-details {
   font-size: 12px;
 }
-/* line 125, ../scss/partial/_general.scss */
+/* line 133, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .conversion-details .conversion-count {
   padding-right: 10px;
   cursor: help;
 }
-/* line 131, ../scss/partial/_general.scss */
+/* line 139, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress, .project-wrapper .project-summary .paid-content-progress {
   margin-top: 15px;
   border: solid 1px #efefef;
@@ -145,7 +153,7 @@ hr {
   position: relative;
   height: 25px;
 }
-/* line 138, ../scss/partial/_general.scss */
+/* line 146, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .fill, .project-wrapper .project-summary .paid-content-progress .fill {
   position: absolute;
   width: 20%;
@@ -154,56 +162,56 @@ hr {
   margin-left: -8px;
   background-color: #efefef;
 }
-/* line 146, ../scss/partial/_general.scss */
+/* line 154, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .fill.ahead-schedule, .project-wrapper .project-summary .paid-content-progress .fill.ahead-schedule {
   background-color: #E4FFE4;
 }
-/* line 149, ../scss/partial/_general.scss */
+/* line 157, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .fill.ahead-schedule.little, .project-wrapper .project-summary .paid-content-progress .fill.ahead-schedule.little {
   background-color: #E4FFE4;
 }
-/* line 152, ../scss/partial/_general.scss */
+/* line 160, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .fill.behind-schedule, .project-wrapper .project-summary .paid-content-progress .fill.behind-schedule {
   background-color: #FFE7E7;
 }
-/* line 155, ../scss/partial/_general.scss */
+/* line 163, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .fill.behind-schedule.little, .project-wrapper .project-summary .paid-content-progress .fill.behind-schedule.little {
   background-color: #FFF3DC;
 }
-/* line 160, ../scss/partial/_general.scss */
+/* line 168, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .progress-label, .project-wrapper .project-summary .paid-content-progress .progress-label {
   z-index: 9;
   position: absolute;
 }
-/* line 165, ../scss/partial/_general.scss */
+/* line 173, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .pitch-progress .day-of-month-indicator, .project-wrapper .project-summary .paid-content-progress .day-of-month-indicator {
   border-right: solid 1px red;
   height: 42px;
   position: absolute;
   margin-top: -9px;
 }
-/* line 173, ../scss/partial/_general.scss */
+/* line 181, ../scss/partial/_general.scss */
 .project-wrapper .project-summary .paid-content-title {
   margin-top: 1em;
 }
-/* line 178, ../scss/partial/_general.scss */
+/* line 186, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item {
   margin-bottom: 1em;
   border: solid 1px #efefef;
 }
-/* line 182, ../scss/partial/_general.scss */
+/* line 190, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item.ignored {
   opacity: 0.5;
 }
-/* line 186, ../scss/partial/_general.scss */
+/* line 194, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item.flagged {
   opacity: 0.5;
 }
-/* line 188, ../scss/partial/_general.scss */
+/* line 196, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item.flagged .item-header {
   background-color: #ffe3e3;
 }
-/* line 193, ../scss/partial/_general.scss */
+/* line 201, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item img {
   width: 24px;
   display: inline-block;
@@ -212,7 +220,7 @@ hr {
   border-radius: 50%;
   border: solid 1px white;
 }
-/* line 202, ../scss/partial/_general.scss */
+/* line 210, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-header {
   background-color: #F9F9F9;
   font-size: 12px;
@@ -220,29 +228,29 @@ hr {
   font-weight: bold;
   padding: 0.5em;
 }
-/* line 209, ../scss/partial/_general.scss */
+/* line 217, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-header .conversion {
   float: right;
   padding-right: 1em;
   line-height: 27px;
   color: green;
 }
-/* line 216, ../scss/partial/_general.scss */
+/* line 224, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-header .item-type {
   float: right;
   font-size: 14px;
   color: #B5B5B5;
 }
-/* line 221, ../scss/partial/_general.scss */
+/* line 229, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-header .item-type .fa-ban, .project-wrapper .feed .feed-item .item-header .item-type .fa-flag {
   padding-right: 6px;
   cursor: pointer;
 }
-/* line 228, ../scss/partial/_general.scss */
+/* line 236, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-body {
   padding: 0.75em;
 }
-/* line 231, ../scss/partial/_general.scss */
+/* line 239, ../scss/partial/_general.scss */
 .project-wrapper .feed .feed-item .item-body .email-contents {
   font-size: 11px;
   line-height: 14px;

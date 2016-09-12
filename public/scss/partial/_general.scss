@@ -82,6 +82,14 @@ hr {
             font-size: 14px;
         }
 
+        .last-communication {
+            font-size: 14px;
+            
+            &.communication-behind {
+                color: red;
+            }
+        }
+
         i.padding-left {
             padding-left: 10px;
         }
