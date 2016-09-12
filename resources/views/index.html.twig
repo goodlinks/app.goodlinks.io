@@ -69,9 +69,11 @@
                     <div class="date-range">
                         {{ project.from_date.format("M j") }} thru {{ project.to_date.format("M j") }} ({{ project.months }} {{ project.months == 1 ? "month" : "months"}})
                     </div>
-                    <div class="last-communication {{ project.oldest_communication_date < "now"|date|date_modify("-100 days")|date("Y-m-d") ? "communication-behind" : "" }}">
-                        Last Communication: {{ project.oldest_communication_date|date("D, M j")  }}
-                    </div>
+                    {% if project.oldest_communication_date %}
+                        <div class="last-communication {{ project.oldest_communication_date < "now"|date|date_modify("-7 days")|date("Y-m-d") ? "communication-behind" : "" }}">
+                            Last Communication: {{ project.oldest_communication_date|date("D, M j")  }}
+                        </div>
+                    {% endif %}
                     <div class="project-stats">
                         <i class="fa fa-globe"></i> {{ project.website_count }} websites
                         <i class="fa fa-paper-plane-o padding-left"></i> {{ project.email_count }} {{ project.email_count == 1 ? "email" : "emails" }}
