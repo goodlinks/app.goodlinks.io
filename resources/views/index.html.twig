@@ -119,7 +119,7 @@
                             {{ project.communication_count }} out of {{ project.monthly_communication_count }} communications
                             {% if project.communication_count_behind > 0 %}
                                 {% set communication_count_behind_total = communication_count_behind_total + project.communication_count_behind %}
-                                ( {{ project.communication_count_behind }} behind)
+                                ({{ project.communication_count_behind }} behind)
                             {% endif %}
                         </div>
                         <div class="day-of-month-indicator" style="left: {{ project.billing_period_completion_percentage }}%"></div>
@@ -146,7 +146,7 @@
             {% endif %}
         {% endif %}
         {% endfor %}
-        ( {{ communication_count_behind_total }} communications behind)
+        ({{ communication_count_behind_total }} communications behind)
     </div>
 </div>
 <script type="text/javascript">
